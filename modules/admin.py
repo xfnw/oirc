@@ -28,12 +28,15 @@ async def part(self, chan, source, msg):
   await self.part(msg)
 
 async def join(self, chan, source, msg):
+  self.t = time.time()+1
   await self.message(chan, '[\x036admin\x0f] joined {}'.format(msg))
   await self.join(msg)
 
 async def joins(self, chan, source, msg):
+  self.t = time.time() + (len(self.joins)*2)
   for i in self.joins:
     await self.join(i)
+    print('joined {}'.format(i))
 
 async def aexec(self, code):
     # Make an async function with the code and `exec` it

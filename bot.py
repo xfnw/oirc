@@ -12,7 +12,7 @@ class Oven(pydle.Client):
     self.raw = {}
     self.help = {}
     self.db = dataset.connect('sqlite:///database.db')
-
+    self.t=0
 
     print('loading modules...')
     await self.loadMods()
@@ -36,6 +36,7 @@ class Oven(pydle.Client):
 
   async def on_invite(self, channel, by):
     print('{} invited me to {}!'.format(by, channel))
+    self.t = time.time()+1
     await self.join(channel)
 
 
@@ -45,7 +46,8 @@ class Oven(pydle.Client):
       for i in self.raw:
         await self.raw[i](self, chan,source,msg)
 
-
+      if time.time() < self.t:
+        return
 
       if msg == '!botlist':
         await self.message(chan, 'helo im owen\'s nice bot')
@@ -80,4 +82,4 @@ if __name__ == "__main__":
   client.admins = ['lickthecheese', 'ben', 'cmccabe', 'gbmor', 'tomasino', 'ubergeek', 'deepend', 'calamitous', 'khuxkm','lick']
   client.prefix = '.'
   client.run('team.tilde.chat', tls=True, tls_verify=False)
-
+  
