@@ -18,12 +18,15 @@ async def rmfact(self,c,n,m):
     crit = co.pop(0)
     filt = ' '.join(co)
     if crit == 'nick' or crit == 'n':
-      self.est.delete(nick=filt)
+      ou = self.est.delete(nick=filt)
     elif crit == 'fact' or crit == 'f':
-      self.est.delete(fact={'like':filt})
+      ou = self.est.delete(fact={'like':filt})
     else:
       await self.message(c,'[\x036estonia\x0f] invalid criterea')
-    await self.message(c, '[\x036estonia\x0f] removed some fact(s)')
+    if ou:
+      await self.message(c, '[\x036estonia\x0f] removed some fact(s)')
+    else:
+      await self.message(c, '[\x036estonia\x0f] did not remove any')
   else:
     await self.message(c,'[\x036estonia\x0f] you must have +o in #estonia')
 
