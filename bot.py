@@ -50,7 +50,7 @@ class Oven(pydle.Client):
         return
 
       if msg == '!botlist':
-        await self.message(chan, 'helo im owen\'s nice bot')
+        await self.message(chan, 'helo im owen\'s nice bot https://xfnw.ttm.sh/git/oirc')
       if msg[:len(self.prefix)] == self.prefix:
 
         msg = msg[len(self.prefix):]
