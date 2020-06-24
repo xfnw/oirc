@@ -2,7 +2,14 @@
 import random
 
 async def getfact(self,c,n,m):
-  fact = random.choice([i['fact'] for i in self.est.find()])
+  if len(m) < 1:
+    fact = random.choice([i['fact'] for i in self.est.find()])
+  else:
+    try:
+      fact = random.choice([i['fact'] for i in self.est.find(fact={'like':"%{}%".format(m)})])
+    except IndexError:
+      await self.message(c,'[\x036estonia\x0f] No facts found.')
+      return
   await self.message(c,'[\x036estonia\x0f] fact: {}'.format(fact))
 
 async def addfact(self,c,n,m):
