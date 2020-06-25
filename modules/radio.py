@@ -21,7 +21,7 @@ def timeDelta(dt):
     days = delta / DAY
 
     if delta <  0:
-        return "you missed it :("
+        return "currently (should) be playing right now"
 
     if delta < 1 * MINUTE:    
       if delta == 1:
@@ -72,7 +72,7 @@ async def upnext(self,c,n,m):
             await self.message(c,'[\x036radio\x0f] it appears that there is nothing on the schedule...')
             return
         up = js[0]
-        await self.message(c,'[\x036radio\x0f] Up next: {}, {}'.format(up['name'],timeDelta(up['start_timestamp'])))
+        await self.message(c,'[\x036radio\x0f] Up next: {}, {}!'.format(up['name'],timeDelta(up['start_timestamp'])))
     else:
         await self.message(c,'[\x036radio\x0f] something went wrong...')
 
