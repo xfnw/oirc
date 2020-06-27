@@ -78,6 +78,7 @@ async def upnext(self,c,n,m):
 
 async def init(self):
     self.cmd['un'] = upnext
-    self.help['un'] = ['un - get who will be up next on tilderadio\'s schedule','noice moosic']
+    self.cmd['upnext'] = upnext
+    self.help['upnext'] = ['upnext - get who will be up next on tilderadio\'s schedule','noice moosic']
 
 
