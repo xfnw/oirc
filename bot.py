@@ -56,8 +56,13 @@ class Oven(pydle.Client):
         msg = msg[len(self.prefix):]
         cmd = msg.split(' ')[0]
         msg = msg[len(cmd)+1:]
-        if cmd in self.cmd:
-          await self.cmd[cmd](self, chan, source, msg)
+        if len(cmd) < 1:
+          return
+        
+        # fuzzy search for commands
+        results = [i for i in self.cmd if i.startswith(cmd)]
+        if len(results) == 1:
+          await self.cmd[results[0]](self, chan, source, msg)
 
 
   async def is_admin(self, nickname):

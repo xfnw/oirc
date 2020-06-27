@@ -83,12 +83,12 @@ async def adminHandle(self, chan, source, msg):
   if await self.is_admin(source):
     msg = msg.split(' ')
     if len(msg) < 1 or not msg[0] in commands:
-      await self.message(chan, 'you press the wrong button on the oven and it burns you')
+      await self.message(chan, '[\x036admin\x0f] Invalid command')
       return
     print('[ADMIN MODULE] {} told me to {}!!!'.format(source,msg[0]))
     await commands[msg.pop(0)](self, chan, source, ' '.join(msg))
   else:
-    await self.message(chan, 'you try to open it, but the oven is locked')
+    await self.message(chan, '[\x036admin\x0f] You do not have permission to do this')
 
 
 async def init(self):
