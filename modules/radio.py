@@ -75,7 +75,7 @@ def formatSec(dt):
     days = delta / DAY
 
     if delta <  0:
-        return "unknown amount of time"
+        return "??"
 
     if delta < 1 * MINUTE:    
       if delta == 1:
@@ -142,7 +142,7 @@ async def nowplaying(self,c,n,m):
         if np['streamer'] == "":
             await self.message(c,'[\x036radio\x0f] autodj has been playing {} for {} (next song in {})'.format(np['song']['text'],formatSec(np['elapsed']),formatSec(np['remaining']-1)))
         else:
-            await self.message(c,'[\x036radio\x0f] {} has been playing "{}" for {} (next song in {})'.format(np['streamer'],np['song']['text'],formatSec(np['elapsed']),formatSec(np['remaining']-1)))
+            await self.message(c,'[\x036radio\x0f] {} has been playing "{}" for {} (next song in {}) ({} listeners!)'.format(np['streamer'],np['song']['text'],formatSec(np['elapsed']),formatSec(np['remaining']-1),js['listeners']['current']))
     else:
         await self.message(c,'[\x036radio\x0f] something went wrong...')
 
