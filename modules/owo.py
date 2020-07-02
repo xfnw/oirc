@@ -13,9 +13,9 @@ async def owologger(self,c,n,m):
 
 async def owoify(self,c,n,m):
   if len(m) < 1:
-    m = ["1"]
+    m = "1"
   try:
-    back = int(m[0])+0
+    back = int(m)+0
   except:
     back = 1
   await self.message(c, await owotext(self, back, c))
