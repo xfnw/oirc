@@ -10,7 +10,7 @@ async def getkeep(self,c,n,m):
     except IndexError:
       await self.message(c,'[\x036keep\x0f] No keeps found.')
       return
-  await self.message(c,'[\x036keep\x0f] keep: {}'.format(keep))
+  await self.message(c,'[\x036keep\x0f] {}'.format(keep))
 
 
 async def grabkeep(self,c,n,m):
