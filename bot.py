@@ -59,6 +59,10 @@ class Oven(pydle.Client):
         if len(cmd) < 1:
           return
         
+        if cmd in self.cmd:
+          await self.cmd[cmd](self, chan, source, msg)
+          return
+
         # fuzzy search for commands
         results = [i for i in self.cmd if i.startswith(cmd)]
         if len(results) == 1:
@@ -66,15 +70,17 @@ class Oven(pydle.Client):
 
 
   async def is_admin(self, nickname):
-    admin = False
 
     # Check the WHOIS info to see if the source has identified with NickServ.
     # This is a blocking operation, so use yield.
-    if nickname in self.admins:
-      info = await self.whois(nickname)
-      admin = info['identified']
+    info = await self.whois(nickname)
+    if 'account' in info:
+      account = info['account']
+    else:
+      # they are not nickserv registered
+      return False
 
-    return admin
+    return account in self.admins
 
   async def on_private_message(self, trash, source, msg):
     if source != self.nickname:

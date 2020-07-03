@@ -2,6 +2,7 @@
 import random
 
 async def getkeep(self,c,n,m):
+  m = m.strip()
   if len(m) < 1:
     keep = random.choice([i['keep'] for i in self.keepdb.find()])
   else:
@@ -59,7 +60,7 @@ async def rmkeep(self,c,n,m):
     filt = ' '.join(co)
     if crit == 'nick' or crit == 'n':
       ou = self.keepdb.delete(nick=filt)
-    elif crit == 'keep' or crit == 'f':
+    elif crit == 'quote' or crit == 'q':
       ou = self.keepdb.delete(keep={'like':filt})
     else:
       await self.message(c,'[\x036keep\x0f] invalid criterea')
@@ -68,7 +69,7 @@ async def rmkeep(self,c,n,m):
     else:
       await self.message(c, '[\x036keep\x0f] did not remove any')
   else:
-    await self.message(c,'[\x036keep\x0f] you must have +o in #keep')
+    await self.message(c,'[\x036keep\x0f] you must have +o in #o')
 
 async def init(self):
   self.keepdb = self.db['keep']
@@ -84,5 +85,5 @@ async def init(self):
 
   self.rmkeepchan = "#o"
   self.cmd['rmkeep'] = rmkeep
-  self.help['rmkeep'] = ['rmkeep <criteria> <pattern> - remove some keep(s). criteria types in (more)','types of criteria: n|nick f|keep eg "rmkeep nick spammer" to get rid of all keeps created by nick spammer']
+  self.help['rmkeep'] = ['rmkeep <criteria> <pattern> - remove some keep(s). criteria types in (more)','types of criteria: n|nick q|quote eg "rmkeep nick spammer" to get rid of all keeps created by nick spammer']
 
