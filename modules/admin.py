@@ -11,15 +11,19 @@ async def quit(self, chan, source, msg):
 
 async def reloadmods(self, chan, source, msg):
   await self.message(chan, '[\x036admin\x0f] reloading modules...')
+  self.oldcmd = self.cmd
   self.cmd = {}
   self.raw = {}
   self.help = {}
-  for i in self.modules:
-    importlib.reload(self.modules[i])
-    await self.modules[i].init(self)
-    #await self.message(chan, '[\x036admin\x0f] load {} sucess!'.format(i))
-  await self.message(chan, '[\x036admin\x0f] done! {} modules reloaded!'.format(len(self.modules)))
-
+  try:
+    for i in self.modules:
+      importlib.reload(self.modules[i])
+      await self.modules[i].init(self)
+      #await self.message(chan, '[\x036admin\x0f] load {} sucess!'.format(i))
+    await self.message(chan, '[\x036admin\x0f] done! {} modules reloaded!'.format(len(self.modules)))
+  except:
+    await self.message(chan, '[\x036admin\x0f] reload failed... attempting to recover...')
+    self.cmd = self.oldcmd
   
 
 async def part(self, chan, source, msg):
@@ -94,7 +98,7 @@ async def adminHandle(self, chan, source, msg):
 
 async def init(self):
   self.cmd['admin'] = adminHandle
-  self.joins = ["#chaos", "#lickthecheese", "#windowsloser", "#cminecraft", "#team", "#clubcraft", "#rscmakerspace", "#archlinux", "#one", "#starlanes", "#ipd",'#hamradio', "#xfnw,#wppnx,#beastars,#o,#rpn,#jitsi", "#crimesmeta,#furry,#kim,#spaceheater,#spacehare,##jan6","#o,#owo,#mesh,#tildemesh,#biking,#tilderadio","#coffee,#estonia,#blamejan6,#banjan6,#mspe","#mspethecat,#mspecat,#mspeisacat"]
+  self.joins = ["#chaos,#lickthecheese,#windowsloser,#cminecraft,#team,#kumquat,#blender", "#latvia,#tea,#koth,#casino,#counting-meta,#arson", "#rscmakerspace", "#archlinux", "#one", "#starlanes", "#ipd",'#hamradio', "#xfnw,#wppnx,#beastars,#o,#rpn,#jitsi", "#crimesmeta,#furry,#kim,#spaceheater,#spacehare,##jan6","#o,#owo,#mesh,#tildemesh,#biking,#tilderadio","#coffee,#estonia,#blamejan6,#banjan6,#mspe","#mspethecat,#mspecat,#mspeisacat,#dommeta"]
   
   self.help['admin'] = ['admin - various bot owner commands (more for subcommands)', 'sub-commands of admin, for more info do help admin <command>: quit reload commit part join joins eval send']
   self.help['admin quit'] = ['admin quit <message> - make the bot disconnect','no']
