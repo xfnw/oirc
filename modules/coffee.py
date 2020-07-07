@@ -30,7 +30,7 @@ async def init(self):
             "healthy",
             ]
     for i in range(len(self.coffeetypes)):
-        self.coffeetypes.append(' ')
+        self.coffeetypes.append('')
 
 
 
