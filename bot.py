@@ -43,30 +43,33 @@ class Oven(pydle.Client):
   async def on_message(self, chan, source, msg):
     if source != self.nickname:
 
-      for i in self.raw:
-        await self.raw[i](self, chan,source,msg)
 
-      if time.time() < self.t:
+      if time.time() > self.t:
+        
+
+        if msg == '!botlist':
+          await self.message(chan, 'helo im owen\'s nice bot https://xfnw.ttm.sh/git/oirc')
+        await self.parseCommand(chan, source, msg)
+      for i in self.raw:
+        await self.raw[i](self, chan, source, msg)
+
+  async def parseCommand(self, chan, source, msg):
+    if msg[:len(self.prefix)] == self.prefix:
+
+      msg = msg[len(self.prefix):]
+      cmd = msg.split(' ')[0]
+      msg = msg[len(cmd)+1:]
+      if len(cmd) < 1:
+        return
+    
+      if cmd in self.cmd:
+        await self.cmd[cmd](self, chan, source, msg)
         return
 
-      if msg == '!botlist':
-        await self.message(chan, 'helo im owen\'s nice bot https://xfnw.ttm.sh/git/oirc')
-      if msg[:len(self.prefix)] == self.prefix:
-
-        msg = msg[len(self.prefix):]
-        cmd = msg.split(' ')[0]
-        msg = msg[len(cmd)+1:]
-        if len(cmd) < 1:
-          return
-        
-        if cmd in self.cmd:
-          await self.cmd[cmd](self, chan, source, msg)
-          return
-
-        # fuzzy search for commands
-        results = [i for i in self.cmd if i.startswith(cmd)]
-        if len(results) == 1:
-          await self.cmd[results[0]](self, chan, source, msg)
+      # fuzzy search for commands
+      results = [i for i in self.cmd if i.startswith(cmd)]
+      if len(results) == 1:
+        await self.cmd[results[0]](self, chan, source, msg)
 
 
   async def is_admin(self, nickname):

@@ -1,6 +1,5 @@
 
-import importlib, time
-
+import importlib, time, asyncio
 
 async def commit(self, chan, source, msg):
   await self.quit('{} told me to commit {}'.format(source,msg))
@@ -34,8 +33,10 @@ async def join(self, chan, source, msg):
 
 async def joins(self, chan, source, msg):
   self.t = time.time() + (len(self.joins)*2)
+  await self.message(chan, '[\x036admin\x0f] I will drop commands for {} seconds to ignore chanhistory...'.format(len(self.joins)*2))
   for i in self.joins:
     await self.join(i)
+    await asyncio.sleep(0.1)
     print('joined {}'.format(i))
 
 async def aexec(self, code):
