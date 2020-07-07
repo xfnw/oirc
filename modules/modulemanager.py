@@ -5,7 +5,7 @@ async def listMods(self,c,n,m):
 
 async def source(self,c,n,m):
     if m == 'o: source':
-        await self.message(c,'[\x036modulemanager\x0f] My source is at https://xfnw.ttm.sh/git/oirc-bot/')
+        await self.message(c,'[\x036modulemanager\x0f] My source is at https://xfnw.ttm.sh/git/oirc/')
 
 
 
