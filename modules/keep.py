@@ -69,7 +69,7 @@ async def rmkeep(self,c,n,m):
     else:
       await self.message(c, '[\x036keep\x0f] did not remove any')
   else:
-    await self.message(c,'[\x036keep\x0f] you must have +o in #o')
+    await self.message(c,'[\x036keep\x0f] you must have +o in #balun')
 
 async def init(self):
   self.keepdb = self.db['keep']
@@ -83,7 +83,7 @@ async def init(self):
   self.cmd['grabkeep'] = grabkeep
   self.help['grabkeep'] = ['grabkeep [back] - grab something to keep','tooootally did not steal this from bitbot']
 
-  self.rmkeepchan = "#o"
+  self.rmkeepchan = "#balun"
   self.cmd['rmkeep'] = rmkeep
   self.help['rmkeep'] = ['rmkeep <criteria> <pattern> - remove some keep(s). criteria types in (more)','types of criteria: n|nick q|quote eg "rmkeep nick spammer" to get rid of all keeps created by nick spammer']
 
