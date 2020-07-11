@@ -1,5 +1,5 @@
 
-import importlib, time, asyncio
+import importlib, time, asyncio, pydle
 
 async def commit(self, chan, source, msg):
   await self.quit('{} told me to commit {}'.format(source,msg))
@@ -36,12 +36,17 @@ async def join(self, chan, source, msg):
   await self.join(msg)
 
 async def joins(self, chan, source, msg):
-  self.t = time.time() + (len(self.joins)*2)
-  await self.message(chan, '[\x036admin\x0f] I will drop commands for {} seconds to ignore chanhistory...'.format(len(self.joins)*2))
-  for i in self.joins:
-    await self.join(i)
-    await asyncio.sleep(0.1)
-    print('joined {}'.format(i))
+  await self.message(chan, '[\x036admin\x0f] I will drop commands for some seconds to ignore chanhistory...')
+  for i in self.chandb.all():
+    self.t = time.time() + 2
+    try:
+        await self.join(i['name'])
+        await asyncio.sleep(0.5)
+        print('joined {}'.format(i['name']))
+    except pydle.client.AlreadyInChannel:
+        print('I am already in {}'.format(i['name']))
+  await asyncio.sleep(2)
+  await self.message(chan, '[\x036admin\x0f] Sucess!')
 
 async def aexec(self, code):
     # Make an async function with the code and `exec` it
@@ -58,7 +63,7 @@ async def ev(self, chan, source, msg):
   msg = msg.split(' ')
   try:
     await self.message(chan, '[\x036admin\x0f] ok, output: {}'.format(
-        str(await aexec(self, ' '.join(msg)))
+        str(await aexec(self, ' '.join(msg)))[:400]
       ))
   except:
     await self.message(chan, '[\x036admin\x0f] exception in eval!')
@@ -72,6 +77,15 @@ async def shut(self, c, n, m):
   self.qtime[c] = time.time()+(60*10)
   await self.message(c, '[\x036admin\x0f] Ok, il be back in 10 minutes')
 
+async def schans(self, c, n, m):
+  self.chandb.delete()
+  for i in self.channels:
+      self.chandb.insert(dict(name=i))
+  await self.message(c, '[\x036admin\x0f] Ok')
+
+
+
+
 commands = {
   'quit': quit,
   'reload': reloadmods,
@@ -81,7 +95,8 @@ commands = {
   'eval': ev,
   'send': send,
   'joins': joins,
-  'shut': shut
+  'shut': shut,
+  'schans': schans
 }
 
 async def adminHandle(self, chan, source, msg):
@@ -97,8 +112,8 @@ async def adminHandle(self, chan, source, msg):
 
 
 async def init(self):
+  self.chandb = self.db['chan']
   self.cmd['admin'] = adminHandle
-  self.joins = ["#chaos,#lickthecheese,#windowsloser,#cminecraft,#team,#kumquat,#blender", "#latvia,#tea,#koth,#casino,#counting-meta,#arson", "#rscmakerspace", "#archlinux", "#one", "#starlanes", "#ipd",'#hamradio', "#xfnw,#wppnx,#beastars,#o,#rpn,#jitsi", "#crimesmeta,#furry,#kim,#spaceheater,#spacehare,##jan6","#o,#owo,#mesh,#tildemesh,#biking,#tilderadio","#coffee,#estonia,#blamejan6,#banjan6,#mspe","#mspethecat,#mspecat,#mspeisacat,#dommeta"]
   
   self.help['admin'] = ['admin - various bot owner commands (more for subcommands)', 'sub-commands of admin, for more info do help admin <command>: quit reload commit part join joins eval send']
   self.help['admin quit'] = ['admin quit <message> - make the bot disconnect','no']
@@ -109,7 +124,7 @@ async def init(self):
   self.help['admin joins'] = ['admin joins - join more channels', 'dont reconnect to a bunch of chans when the bots crashing etc']
   self.help['admin eval'] = ['admin eval <command> - absolute power corrupts absolutely', 'lmao']
   self.help['admin send'] = ['admin send <channel> <message> - send a message', 'lmao']
-
+  self.help['admin schans'] = ['admin schans - save the commands to join',';p;']
 
 
 
