@@ -1,5 +1,5 @@
 
-import requests
+import requests, asyncio
 
 
 import datetime
@@ -147,9 +147,47 @@ async def nowplaying(self,c,n,m):
         await self.message(c,'[\x036radio\x0f] something went wrong...')
 
 
+
+async def radioremind(self,c,n,m,scindex=0):
+    res = requests.get('https://radio.tildeverse.org/api/station/1/schedule')
+    if res.status_code == 200:
+        js = res.json()
+        if len(js) < scindex+1:
+            await self.message(c,'[\x036radio\x0f] it appears that there is nothing on the schedule...')
+            return
+        up = js[scindex]
+
+        dt = datetime.datetime.fromtimestamp(up['start_timestamp'])
+        now = datetime.datetime.now()
+        delta_time = (dt - now)
+        delta_time = (delta_time.days * DAY + delta_time.seconds) - 30
+        
+        if delta_time < 1:
+            await radioremind(self,c,n,m,scindex=scindex+1)
+            return
+        if len(m) > 0:
+            toremind = m
+        else:
+            toremind = c
+        await self.message(c,'[\x036radio\x0f] ok, il remind {} when its time for {}\'s show!'.format(toremind,up['name']))
+        if toremind in self.rreminders:
+            return
+        self.rreminders.append(toremind)
+        await asyncio.sleep(delta_time)
+        await self.message(c,'[\x036radio\x0f] beep boop, {} is here to remind you that {}\'s show is coming up in about 30 seconds!'.format(n,up['name']))
+    else:
+        await self.message(c,'[\x036radio\x0f] something went wrong...')
+
+
+
+
+
 async def init(self):
+    self.rreminders = []
     self.cmd['un'] = upnext
     self.cmd['upnext'] = upnext
+    self.cmd['radioremind'] = radioremind
+    self.help['radioremind'] = ['radioremind [where] - set a reminder that someone will stream','oh no i forgot what to put here!']
     self.help['upnext'] = ['upnext - get who will be up next on tilderadio\'s schedule','noice moosic']
     self.cmd['nowplaying'] = nowplaying
     self.help['nowplaying'] = ['nowplaying - when radiobot is dead use this instead!','lol']
