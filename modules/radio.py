@@ -165,25 +165,38 @@ async def radioremind(self,c,n,m,scindex=0):
         if delta_time < 1:
             await radioremind(self,c,n,m,scindex=scindex+1)
             return
-        if len(m) > 0:
-            toremind = m
+        if len(m.strip()) > 0:
+            toremind = m.strip()
         else:
             toremind = c
-        await self.message(c,'[\x036radio\x0f] ok, il remind {} when its time for {}\'s show!'.format(toremind,up['name']))
+
         if toremind in self.rreminders:
+            await self.message(c,'[\x036radio\x0f] There is already a reminder set for {}, you can also specify somewhere else to send the reminder'.format(toremind))
             return
-        self.rreminders.append(toremind)
-        await asyncio.sleep(delta_time)
-        await self.message(c,'[\x036radio\x0f] beep boop, {} is here to remind you that {}\'s show is coming up in about 30 seconds!'.format(n,up['name']))
+        await self.message(c,'[\x036radio\x0f] ok, il remind {} when its time for {}\'s show! (in {})'.format(toremind,up['name'],formatSec(delta_time)))
+        
+        task = asyncio.get_event_loop().create_task(remindTask(n, up, delta_time))
+        self.rreminders[toremind] = task
+        try:
+            await task
+        except asyncio.CancelledError:
+            print('Reminder for {} cancelled'.format(toremind))
+        finally:
+            print('Reminder for {} finished'.format(toremind))
+            self.rreminders.pop(toremind)
     else:
         await self.message(c,'[\x036radio\x0f] something went wrong...')
 
+async def remindTask(n, up, delta_time):
 
+    await asyncio.sleep(delta_time)
+    await self.message(c,'[\x036radio\x0f] beep boop, {} is here to remind you that {}\'s show is coming up in about 30 seconds!'.format(n,up['name']))
+ 
 
 
 
 async def init(self):
-    self.rreminders = []
+    self.rreminders = {}
     self.cmd['un'] = upnext
     self.cmd['upnext'] = upnext
     self.cmd['radioremind'] = radioremind
