@@ -24,7 +24,7 @@ async def bal(self):
 async def send(self,c,n,m):
     m = m.split(' ')
     if len(m) < 2:
-        await self.message(c, '[\x036admin\x0f] invalid syntax')
+        await self.message(c, '[\x036coin\x0f] invalid syntax')
         return
     to = await ident.user(self, m.pop(0))
     amount = float(m.pop(0))
@@ -33,7 +33,7 @@ async def send(self,c,n,m):
 
     self.ledger.insert(dict(to=to,sender=sender,amount=amount,message=message))
 
-    await self.message(c, '[\x036admin\x0f] added transaction to ledger, check balances to verify')
+    await self.message(c, '[\x036coin\x0f] added transaction to ledger, check balances to verify')
 
 async def balance(self,c,n,m):
     m = m.strip()
@@ -45,8 +45,16 @@ async def balance(self,c,n,m):
         m = m
     bals = await bal(self)
     if m in bals:
-        await self.message(c, '[\x036coin\x0f] {}\u200c{}\'s balance is {} BUUT (BalUn Useless Tokens), {}% of the total supply'
-                .format(m[:1],m[1:],bals[m],int((bals[m]/self.initfund)*100)))
+        latest = self.ledger.find_one(to=m,order_by='-id')
+        if latest:
+            await self.message(c, '[\x036coin\x0f] {}\u200c{}\'s balance is {} BUUT (BalUn Useless Tokens), {}% of the total supply'
+                    .format(m[:1],m[1:],bals[m],int((bals[m]/self.initfund)*100))+
+                    '. last deposit: [{} from {}, "{}"]'.format(
+                        latest['amount'], latest['sender'], latest['message']
+                        ))
+        else:
+            await self.message(c, '[\x036coin\x0f] {}\u200c{}\'s balance is {} BUUT (BalUn Useless Tokens), {}% of the total supply'
+                    .format(m[:1],m[1:],bals[m],int((bals[m]/self.initfund)*100)))
     else:
         await self.message(c, '[\x036coin\x0f] this user has never made a transaction')
 
