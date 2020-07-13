@@ -28,9 +28,9 @@ async def send(self,c,n,m):
         return
     try:
         to = await ident.user(self, m.pop(0))
-    except AttributeError:
+    except:
         await self.message(c, '[\x036coin\x0f] that user is not logged in. refusing so coins are not lost')
-    amount = float(m.pop(0))
+    amount = round(float(m.pop(0)),2)
     message = ' '.join(m)
     sender = await ident.user(self, n)
 
