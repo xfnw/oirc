@@ -38,14 +38,14 @@ async def join(self, chan, source, msg):
 async def joins(self, chan, source, msg):
   await self.message(chan, '[\x036admin\x0f] I will drop commands for some seconds to ignore chanhistory...')
   for i in self.chandb.all():
-    self.t = time.time() + 2
+    self.t = time.time() + 5
     try:
         await self.join(i['name'])
-        await asyncio.sleep(0.5)
+        await asyncio.sleep(3)
         print('joined {}'.format(i['name']))
     except pydle.client.AlreadyInChannel:
         print('I am already in {}'.format(i['name']))
-  await asyncio.sleep(2)
+  await asyncio.sleep(3)
   await self.message(chan, '[\x036admin\x0f] Sucess!')
 
 async def aexec(self, code):

@@ -3,7 +3,7 @@
 
 import pydle, asyncio, dataset, sys, os, time
 
-class Oven(pydle.Client):
+class Balun(pydle.Client):
   async def on_connect(self):
     print('Connected!')
 
@@ -92,7 +92,7 @@ class Oven(pydle.Client):
 
 
 if __name__ == "__main__":
-  client = Oven('balun', realname='owens bot')
+  client = Balun('balun', realname='owens bot')
   client.admins = ['lickthecheese', 'ben', 'coffeeowl', 'gbmor', 'tomasino', 'ubergeek', 'deepend', 'calamitous', 'khuxkm']
   client.prefix = '.'
   client.run('team.tilde.chat', tls=True, tls_verify=False)
