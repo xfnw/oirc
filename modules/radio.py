@@ -175,7 +175,7 @@ async def radioremind(self,c,n,m,scindex=0):
             return
         await self.message(c,'[\x036radio\x0f] ok, il remind {} when its time for {}\'s show! (in {})'.format(toremind,up['name'],formatSec(delta_time)))
         
-        task = asyncio.get_event_loop().create_task(remindTask(self, n, up, delta_time))
+        task = asyncio.get_event_loop().create_task(remindTask(self, n, up, delta_time, c))
         self.rreminders[toremind] = task
         try:
             await task
@@ -187,7 +187,7 @@ async def radioremind(self,c,n,m,scindex=0):
     else:
         await self.message(c,'[\x036radio\x0f] something went wrong...')
 
-async def remindTask(self, n, up, delta_time):
+async def remindTask(self, n, up, delta_time,c):
 
     await asyncio.sleep(delta_time)
     await self.message(c,'[\x036radio\x0f] beep boop, {} is here to remind you that {}\'s show is coming up in about 30 seconds!'.format(n,up['name']))
