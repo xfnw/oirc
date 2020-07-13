@@ -26,7 +26,10 @@ async def send(self,c,n,m):
     if len(m) < 2:
         await self.message(c, '[\x036coin\x0f] invalid syntax')
         return
-    to = await ident.user(self, m.pop(0))
+    try:
+        to = await ident.user(self, m.pop(0))
+    except AttributeError:
+        await self.message(c, '[\x036coin\x0f] that user is not logged in. refusing so coins are not lost')
     amount = float(m.pop(0))
     message = ' '.join(m)
     sender = await ident.user(self, n)
@@ -69,7 +72,7 @@ async def richest(self,c,n,m):
 
 async def init(self):
     self.ledger = self.db['ledger']
-    self.initfund = 100.00
+    self.initfund = 137.0
 
 
     self.cmd['sendcoins'] = send
