@@ -18,7 +18,8 @@ async def bal(self):
             self.ledger.delete(id=t['id'])
             continue # no debt for you
         bals[t['sender']] += 0 - t['amount']
-        bals[t['to']] += t['amount']
+        bals[t['to']] += t['amount'] * 0.99
+        bals['bank'] += t['amount'] * 0.01
     return bals
 
 async def send(self,c,n,m):
@@ -51,13 +52,13 @@ async def balance(self,c,n,m):
         latest = self.ledger.find_one(to=m,order_by='-id')
         if latest:
             await self.message(c, '[\x036coin\x0f] {}\u200c{}\'s balance is {} BUUT (BalUn Useless Tokens), {}% of the total supply'
-                    .format(m[:1],m[1:],bals[m],int((bals[m]/self.initfund)*100))+
+                    .format(m[:1],m[1:],round(bals[m],2),int((bals[m]/self.initfund)*100))+
                     '. last deposit: [{} from {}, "{}"]'.format(
                         latest['amount'], latest['sender'], latest['message']
                         ))
         else:
             await self.message(c, '[\x036coin\x0f] {}\u200c{}\'s balance is {} BUUT (BalUn Useless Tokens), {}% of the total supply'
-                    .format(m[:1],m[1:],bals[m],int((bals[m]/self.initfund)*100)))
+                    .format(m[:1],m[1:],round(bals[m],2),int((bals[m]/self.initfund)*100)))
     else:
         await self.message(c, '[\x036coin\x0f] this user has never made a transaction')
 
@@ -66,7 +67,7 @@ async def richest(self,c,n,m):
 
     await self.message(c, '[\x036coin\x0f] richest users: '+', '.join(
         [
-            i[0][:1]+"\u200c"+i[0][1:]+": "+str(i[1])
+            i[0][:1]+"\u200c"+i[0][1:]+": "+str(round(i[1],2))
             for i in richest]
         ))
 

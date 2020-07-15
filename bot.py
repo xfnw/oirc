@@ -41,6 +41,8 @@ class Balun(pydle.Client):
 
 
   async def on_message(self, chan, source, msg):
+    if chan == self.nickname: # dont try to message yourself when people dm you lmfao
+      chan = source
     if source != self.nickname:
 
 
@@ -85,10 +87,6 @@ class Balun(pydle.Client):
 
     return account in self.admins
 
-  async def on_private_message(self, trash, source, msg):
-    if source != self.nickname:
-      for i in self.raw:
-        await self.raw[i](self, source, source, msg)
 
 
 if __name__ == "__main__":
