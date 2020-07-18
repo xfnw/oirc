@@ -39,6 +39,9 @@ class Balun(pydle.Client):
     self.t = time.time()+1
     await self.join(channel)
 
+  async def on_join(self, channel, person):
+      await super().on_join(channel, person)
+      await self.modules['usrinfo'].on_join(self,channel,person)
 
   async def on_message(self, chan, source, msg):
     if chan == self.nickname: # dont try to message yourself when people dm you lmfao
