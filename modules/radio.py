@@ -119,6 +119,8 @@ def formatSec(dt):
 
 
 async def upnext(self,c,n,m):
+    if 'tildebot' in self.channels[c]['users']:
+        return # only respond in #tr whilst tildebot is down
     res = requests.get('https://radio.tildeverse.org/api/station/1/schedule')
     if res.status_code == 200:
         js = res.json()
@@ -131,6 +133,8 @@ async def upnext(self,c,n,m):
         await self.message(c,'[\x036radio\x0f] something went wrong...')
 
 async def nowplaying(self,c,n,m):
+    if 'tildebot' in self.channels[c]['users']:
+        return # only respond in #tr whilst tildebot is down
     res = requests.get("https://radio.tildeverse.org/api/nowplaying/1")
     if res.status_code == 200:
         js = res.json()
