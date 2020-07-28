@@ -43,6 +43,9 @@ class Balun(pydle.Client):
       await super().on_join(channel, person)
       await self.modules['usrinfo'].on_join(self,channel,person)
 
+  async def on_ctcp(self, by, chan, what, contents):
+    await self.on_message(chan,by,"{} {}".format(what,contents)) # treat ctcp as normal messages
+
   async def on_message(self, chan, source, msg):
     if chan == self.nickname: # dont try to message yourself when people dm you lmfao
       chan = source
