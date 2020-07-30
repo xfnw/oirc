@@ -51,13 +51,13 @@ async def balance(self,c,n,m):
     if m in bals:
         latest = self.ledger.find_one(to=m,order_by='-id')
         if latest:
-            await self.message(c, '[\x036coin\x0f] {}\u200c{}\'s balance is {} BUUT (BalUn Useless Tokens), {}% of the total supply'
+            await self.message(c, '[\x036coin\x0f] {}\u200c{}\'s balance is {} BUTT (Balun Useless Trading Tokens), {}% of the total supply'
                     .format(m[:1],m[1:],round(bals[m],2),int((bals[m]/self.initfund)*100))+
                     '. last deposit: [{} from {}, "{}"]'.format(
                         latest['amount'], latest['sender'], latest['message']
                         ))
         else:
-            await self.message(c, '[\x036coin\x0f] {}\u200c{}\'s balance is {} BUUT (BalUn Useless Tokens), {}% of the total supply'
+            await self.message(c, '[\x036coin\x0f] {}\u200c{}\'s balance is {} BUTT (BalUn Useless Trading Tokens), {}% of the total supply'
                     .format(m[:1],m[1:],round(bals[m],2),int((bals[m]/self.initfund)*100)))
     else:
         await self.message(c, '[\x036coin\x0f] this user has never made a transaction')
