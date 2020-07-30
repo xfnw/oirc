@@ -11,7 +11,12 @@ async def helpParse(self, c, n, m):
 
 async def more(self, c, n, m):
   if c in self.more:
-    await self.message(c, '[\x036help\x0f] '+self.more.pop(c))
+    moretext = self.more.pop(c)
+    if len(moretext) > 300:
+      self.more[c]=moretext[:250]
+      moretext = moretext[250:]+' (more)'
+
+    await self.message(c, '[\x036help\x0f] '+moretext)
     return
   else:
     await self.message(c, '[\x036help\x0f] there is no more more text lmao stop')

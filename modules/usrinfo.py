@@ -31,12 +31,9 @@ async def findalt(self,c,n,m):
         await self.message(c,'[\x036usrinfo\x0f] I could not find any alts :(')
         return
     falt=' '.join([i[:1]+'\u200c'+i[1:] for i in sorted(list(set(alts)))])
-    if len(falt) > 200:
-        if c in self.more:
-            self.more[c].append(falt[400:])
-        else:
-            self.more[c] = [falt[400:]]
-        falt = falt[:400]+' (more)'
+    if len(falt) > 250:
+        self.more[c] = falt[200:]
+        falt = falt[:200]+' (more)'
     await self.message(c,'[\x036usrinfo\x0f] alts: {}'.format(falt))
 
 async def init(self):
