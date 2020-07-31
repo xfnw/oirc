@@ -9,7 +9,7 @@ async def coffeeup(self,c,n,m):
                 self.coffee.update(dict(name='cupcount',value=cc['value']+1),['name'])
             else:
                 self.coffee.insert(dict(name='cupcount',value=1))
-            await self.message(c, '[\x036coffee\x0f] ・゜゜・。。・゜゜c[_] COFFEE UP!')
+            await self.message(c, '[\x036coffee\x0f] ・゜゜・。。・゜゜c[~] COFFEE UP!')
         elif "cupcount" in m:
             await self.message(c, '[\x036coffee\x0f] {} delicious cups of {}coffee served so far!'.format(
                 self.coffee.find_one(name='cupcount')['value'], random.choice(self.coffeetypes)
