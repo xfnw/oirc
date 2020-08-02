@@ -119,7 +119,7 @@ def formatSec(dt):
 
 
 async def upnext(self,c,n,m):
-    if c in self.channels and 'tildebot' in self.channels[c]['users']:
+    if self.tildebot and c in self.channels and 'tildebot' in self.channels[c]['users']:
         return # only respond in #tr whilst tildebot is down
     res = requests.get('https://radio.tildeverse.org/api/station/1/schedule')
     if res.status_code == 200:
@@ -133,7 +133,7 @@ async def upnext(self,c,n,m):
         await self.message(c,'[\x036radio\x0f] something went wrong...')
 
 async def nowplaying(self,c,n,m):
-    if c in self.channels and 'tildebot' in self.channels[c]['users']:
+    if self.tildebot and c in self.channels and 'tildebot' in self.channels[c]['users']:
         return # only respond in #tr whilst tildebot is down
     res = requests.get("https://radio.tildeverse.org/api/nowplaying/1")
     if res.status_code == 200:
@@ -200,6 +200,7 @@ async def remindTask(self, n, up, delta_time,c):
 
 
 async def init(self):
+    self.tildebot = True
     self.rreminders = {}
     self.cmd['un'] = upnext
     self.cmd['upnext'] = upnext
