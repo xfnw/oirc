@@ -2,6 +2,7 @@
 import random
 
 async def owologger(self,c,n,m):
+  print("<{} {}> {}".format(c,n,m))
   if m[:len(self.prefix)] == self.prefix:
     return
   if c not in self.owolog:
