@@ -13,8 +13,8 @@ async def more(self, c, n, m):
   if c in self.more:
     moretext = self.more.pop(c)
     if len(moretext) > 300:
-      self.more[c]=moretext[:250]
-      moretext = moretext[250:]+' (more)'
+      self.more[c]=moretext[250:]
+      moretext = moretext[:250]+' (more)'
 
     await self.message(c, '[\x036help\x0f] '+moretext)
     return
