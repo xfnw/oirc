@@ -16,6 +16,29 @@ async def on_all(self,wtime=100):
         self.userdb.insert_ignore(dict(user),['id'])
     print('done')
 
+
+async def maskfind(self,c,n,m):
+    host = nick = ident = '%'
+    m = m.strip().replace("*","%").split('@')
+    host = m.pop()
+    if len(m) > 0:
+        ni = m.pop().split('!')
+        ident = ni.pop()
+        if len(ni) > 0:
+            nick = ni.pop()
+
+
+    alts = ["{}!{}@{}".format(i['nickname'],i['username'],i['hostname']) for i in self.userdb.find(hostname={'like':host},username={'like':ident},nickname={'like':nick})]
+    falt=' '.join([i[:1]+'\u200c'+i[1:] for i in sorted(list(set(alts)))])
+    if len(falt) > 250:
+        self.more[c] = falt[200:]
+        falt = falt[:200]+' (more)'
+    await self.message(c,'[\x036usrinfo\x0f] masks: {}'.format(falt))
+
+
+
+
+
 async def findalt(self,c,n,m):
     m = m.strip()
     user = self.userdb.find_one(nickname={'like':m},order_by='-id')
@@ -45,3 +68,5 @@ async def init(self):
 
     self.help['findalt'] = ['findalt <nick> - find out who someone\'s alts are',';p']
     self.cmd['findalt'] = findalt
+    self.help['maskfind'] = ['maskfind <mask> - search masks','OW']
+    self.cmd['maskfind'] = maskfind
