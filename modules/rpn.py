@@ -13,10 +13,10 @@ def isfloat(value):
 async def rpninp(self, chan, nick, msg):
   if chan not in self.rpnhist:
     self.rpnhist[chan] = [0]
-  self.rpnhist[chan].append(0)
-  del self.rpnhist[chan][15:]
   try:
     for m in msg.split(' '):
+        self.rpnhist[chan].append(0)
+        del self.rpnhist[chan][15:]
         if isfloat(m):
           self.rpnhist[chan].insert(0, float(m))
           continue
