@@ -21,7 +21,7 @@ async def plogger(self,c,n,m):
               self.wlevel[n] = 0
           if self.wlevel[n] == 3:
               await self.set_mode(c,self.mutesyntax[0],self.mutesyntax[1].format(n+'!*@*'))
-          if self.wlevel[n] > 6:
+          if self.wlevel[n] > 10:
               self.wlevel[n] = 0
               await self.kick(c,n,'stop spamming thanks')
               
