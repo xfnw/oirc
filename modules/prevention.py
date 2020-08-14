@@ -20,10 +20,11 @@ async def plogger(self,c,n,m):
           else:
               self.wlevel[n] = 0
           if self.wlevel[n] == 3:
-              await self.message(c,'[\x036prevention\x0f] hey {}, cool it with all the messages'.format(n))
+              await self.set_mode(c,self.mutesyntax[0],self.mutesyntax[1].format(n+'!*@*'))
           if self.wlevel[n] > 6:
               self.wlevel[n] = 0
-              await self.set_mode(c,self.mutesyntax[0],self.mutesyntax[1].format(n+'!*@*'))
+              await self.kick(c,n,'stop spamming thanks')
+              
   
 
 
