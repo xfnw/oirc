@@ -10,7 +10,7 @@ async def plogger(self,c,n,m):
     del self.plog[c][:-50]
 
 
-  if c in self.channels and 'o' in self.channels[c]['modes'] and self.nickname in self.channels[c]['modes']['o']:
+  if c in self.channels and 'o' in self.channels[c]['modes'] and self.nickname in self.channels[c]['modes']['o'] and ('v' not in self.channels[c]['modes'] or n not in self.channels[c]['modes']['v']):
       # fun time
       umc = len([i for i in self.plog[c][-10:] if i[0]==n])
       #await self.message(c,str(umc))
