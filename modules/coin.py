@@ -2,7 +2,7 @@ import modules.identify as ident
 import asyncio
 
 async def bal(self):
-    bals = {'bank':self.initfund}
+    bals = {}
     for t in self.ledger:
         await asyncio.sleep(0) # yeild control as this is a long operation
         t['amount'] = float(t['amount'])
@@ -14,12 +14,15 @@ async def bal(self):
         if t['to'] not in bals:
             bals[t['to']]=0.00
 
-        if bals[t['sender']] - t['amount'] < 0.0:
+        if t['sender'] != 'bank' and bals[t['sender']] - t['amount'] < 0.0:
             self.ledger.delete(id=t['id'])
             continue # no debt for you
         bals[t['sender']] += 0 - t['amount']
-        bals[t['to']] += t['amount'] * 0.99
-        bals['bank'] += t['amount'] * 0.01
+        bals[t['to']] += t['amount']
+
+        for i in bals:
+            bals['bank'] += bals[i] * 0.001
+            bals[i] -= bals[i] * 0.001
     return bals
 
 async def send(self,c,n,m):
@@ -73,7 +76,6 @@ async def richest(self,c,n,m):
 
 async def init(self):
     self.ledger = self.db['ledger']
-    self.initfund = 137.0
 
 
     self.cmd['sendcoins'] = send
