@@ -77,7 +77,7 @@ async def richest(self,c,n,m):
 
 async def init(self):
     self.ledger = self.db['ledger']
-    self.initfund = 0
+    self.initfund = 1
 
     self.cmd['sendcoins'] = send
     self.cmd['balance'] = balance
