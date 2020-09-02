@@ -23,6 +23,7 @@ async def bal(self):
         for i in bals:
             bals['bank'] += bals[i] * 0.001
             bals[i] -= bals[i] * 0.001
+    self.initfund = abs(bals['bank'])
     return bals
 
 async def send(self,c,n,m):
@@ -76,7 +77,7 @@ async def richest(self,c,n,m):
 
 async def init(self):
     self.ledger = self.db['ledger']
-
+    self.initfund = 0
 
     self.cmd['sendcoins'] = send
     self.cmd['balance'] = balance
