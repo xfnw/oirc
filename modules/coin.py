@@ -79,6 +79,7 @@ async def init(self):
     self.ledger = self.db['ledger']
     self.initfund = 1
 
+    self.cmd['tipcoins'] = send
     self.cmd['sendcoins'] = send
     self.cmd['balance'] = balance
     self.cmd['richest'] = richest
