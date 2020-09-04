@@ -14,7 +14,7 @@ async def bal(self):
         if t['to'] not in bals:
             bals[t['to']]=0.00
 
-        if t['sender'] != 'bank' and bals[t['sender']] - t['amount'] < 0.0:
+        if t['sender'] != 'bank' and round(bals[t['sender']],2) - t['amount'] < 0.0:
             self.ledger.delete(id=t['id'])
             continue # no debt for you
         bals[t['sender']] += 0 - t['amount']
@@ -61,7 +61,7 @@ async def balance(self,c,n,m):
                         latest['amount'], latest['sender'], latest['message']
                         ))
         else:
-            await self.message(c, '[\x036coin\x0f] {}\u200c{}\'s balance is {} BUTT (BalUn Useless Trading Tokens), {}% of the total supply'
+            await self.message(c, '[\x036coin\x0f] {}\u200c{}\'s balance is {} BUTT (Balun Useless Trading Tokens), {}% of the total supply'
                     .format(m[:1],m[1:],round(bals[m],2),int((bals[m]/self.initfund)*100)))
     else:
         await self.message(c, '[\x036coin\x0f] this user has never made a transaction')
