@@ -7,7 +7,7 @@ async def pd(self,c,n,m):
         print('duck in',c)
     elif c in self.duckmsg:
         self.duckmsg[c] += 1
-        if self.duckmsg[c] == 200:
+        if self.duckmsg[c] == 200 or self.duckmsg[c] == 150 or self.duckmsg[c] == 140:
             await self.notice(self.ducknotif,'i predict there will be a duck in {} soon'.format(c))
 
 async def init(self):
