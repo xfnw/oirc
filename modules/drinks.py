@@ -2,8 +2,8 @@ import random
 
 
 async def coffeeup(self,c,n,m):
-    if c in ['#coffee','#tea','#bots']:
-        if c[1:]+"!" in m:
+    if c in ['#coffee','#tea','#water']:
+        if c[1:]+"!" in m and c+'!' not in m:
             cc = self.coffee.find_one(name=c)
             if cc:
                 self.coffee.update(dict(name=c,value=cc['value']+1),['name'])
