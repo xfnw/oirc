@@ -9,9 +9,9 @@ async def coffeeup(self,c,n,m):
                 self.coffee.update(dict(name='cupcount',value=cc['value']+1),['name'])
             else:
                 self.coffee.insert(dict(name='cupcount',value=1))
-            await self.message(c, '[\x036coffee\x0f] ・゜゜・。。・゜゜c[~] COFFEE UP!')
+            await self.message(c, '[\x036drinks\x0f] ・゜゜・。。・゜゜c[~] COFFEE UP!')
         elif "cupcount" in m:
-            await self.message(c, '[\x036coffee\x0f] {} delicious cups of {}coffee served so far!'.format(
+            await self.message(c, '[\x036drinks\x0f] {} delicious cups of {}coffee served so far!'.format(
                 self.coffee.find_one(name='cupcount')['value'], random.choice(self.coffeetypes)
                 ))
     if c == '#tea':
@@ -21,9 +21,9 @@ async def coffeeup(self,c,n,m):
                 self.coffee.update(dict(name='teacount',value=cc['value']+1),['name'])
             else:
                 self.coffee.insert(dict(name='teacount',value=1))
-            await self.message(c, '[\x036coffee\x0f] ・゜゜・。。・゜゜[_]b TEA UP!')
+            await self.message(c, '[\x036drinks\x0f] ・゜゜・。。・゜゜[_]b TEA UP!')
         elif "cupcount" in m:
-            await self.message(c, '[\x036coffee\x0f] {} delicious mugs of {}tea served so far!'.format(
+            await self.message(c, '[\x036drinks\x0f] {} delicious mugs of {}tea served so far!'.format(
                 self.coffee.find_one(name='teacount')['value'], random.choice(self.coffeetypes)
                 ))
 
