@@ -29,7 +29,7 @@ async def maskfind(self,c,n,m):
 
 
     alts = ["{}!{}@{}".format(i['nickname'],i['username'][:1]+"\u200c"+i['username'][1:],i['hostname']) for i in self.userdb.find(hostname={'like':host},username={'like':ident},nickname={'like':nick},order_by='-id')]
-    falt=' '.join([i[:1]+'\u200c'+i[1:] for i in sorted(list(set(alts)))])
+    falt=' '.join([i[:1]+'\u200c'+i[1:] for i in list(set(alts))])
     if len(falt) > 250:
         self.more[c] = falt[200:]
         falt = falt[:200]+' (more)'
