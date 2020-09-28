@@ -8,7 +8,6 @@ async def source(self,c,n,m):
         await self.message(c,'[\x036modulemanager\x0f] My source is at https://xfnw.ttm.sh/git/oirc/')
 
 
-
 async def init(self):
   self.help['modules'] = ['modules - list the modules',':o']
   self.cmd['modules'] = listMods

@@ -83,6 +83,22 @@ async def schans(self, c, n, m):
       self.chandb.insert(dict(name=i))
   await self.message(c, '[\x036admin\x0f] Ok')
 
+async def addalias(self,c,n,m):
+    al = m.split(' ')[0]
+    m = m[len(al)+1:] # dont use the list since i want trailing spaces
+    if al in self.cmd:
+        await self.message(c,'[\x036admin\x0f] no dont overwrite a command dummy')
+        return
+    self.cmd[al]=Alias(m).alias
+
+    await self.message(c,'[\x036admin\x0f] added "{}" alias for "{}"'.format(al,m))
+
+
+class Alias():
+    def __init__(self, ms):
+        self.ms = str(ms)
+    async def alias(alself,self,c,n,m):
+        asyncio.create_task(self.parseCommand(c,n,alself.ms.format(m)))
 
 
 
@@ -96,7 +112,8 @@ commands = {
   'send': send,
   'joins': joins,
   'shut': shut,
-  'schans': schans
+  'schans': schans,
+  'addalias': addalias
 }
 
 async def adminHandle(self, chan, source, msg):
