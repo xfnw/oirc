@@ -9,7 +9,7 @@ async def on_all(self,wtime=100):
     print('will index users in ',wtime)
     await asyncio.sleep(wtime)
     print('started indexing users')
-    users = self.users
+    users = self.users.copy()
     for person in users:
         user = self.users[person]
         await asyncio.sleep(0)
