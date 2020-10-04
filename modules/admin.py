@@ -123,7 +123,7 @@ class Ot():
         self.ms = str(ms)
         self.al = str(al)
     async def ot(alself,self,c,n,m):
-        if alself.al in m:
+        if alself.al in m and n != self.nickname:
             asyncio.create_task(self.on_message(c,n,alself.ms.format(m)))
             self.rawm.pop(alself.al)
 
@@ -170,7 +170,7 @@ async def adminHandle(self, chan, source, msg):
       await self.message(chan, '[\x036admin\x0f] Invalid command')
       return
     print('[ADMIN MODULE] {} told me to {}!!!'.format(source,msg[0]))
-    await commands[msg.pop(0)](self, chan, source, ' '.join(msg))
+    asyncio.create_task(commands[msg.pop(0)](self, chan, source, ' '.join(msg)))
   else:
     await self.message(chan, '[\x036admin\x0f] You do not have permission to do this')
 
