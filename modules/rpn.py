@@ -63,7 +63,7 @@ async def init(self):
   self.help['rpn'] = ['rpn <inp> - simple reverse polish notation calculator (more)', 'it has an alias of . so you can just do {}. <inp>, and if enabled it will also parse floats and functions as input. there are 4 functions, add (+|a), subtract (-|s), multiply (*|x|m), and devide (/|d), and p to print register 0'.format(self.prefix)]
   self.cmd['rpn'] = rpninp
   self.cmd['.'] = rpninp
-  self.raw['rpn'] = rpninp
+  self.rawm['rpn'] = rpninp
   self.cmd['rt'] = rpntoggle
   self.help['rt'] = ['rt - toggle the output of rpn calculatons into the channel', 'rpn is cool']
 

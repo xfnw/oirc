@@ -11,6 +11,6 @@ async def pd(self,c,n,m):
             await self.notice(self.ducknotif,'i predict there will be a duck in {} soon'.format(c))
 
 async def init(self):
-    self.raw['pd'] = pd
+    self.rawm['pd'] = pd
     self.ducknotif='xfnw'
     self.duckmsg = {}

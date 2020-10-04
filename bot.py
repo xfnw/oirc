@@ -9,7 +9,7 @@ class Balun(pydle.Client):
 
     self.modules = {}
     self.cmd = {}
-    self.raw = {}
+    self.rawm = {}
     self.help = {}
     self.db = dataset.connect('sqlite:///database.db')
     self.t=0
@@ -58,8 +58,8 @@ class Balun(pydle.Client):
         if msg == '!botlist':
           await self.message(chan, 'helo im owen\'s nice bot https://xfnw.ttm.sh/git/oirc')
         await self.parseCommand(chan, source, msg)
-      for i in self.raw:
-        await self.raw[i](self, chan, source, msg)
+      for i in self.rawm:
+        await self.rawm[i](self, chan, source, msg)
 
   async def parseCommand(self, chan, source, msg):
     if msg[:len(self.prefix)] == self.prefix:

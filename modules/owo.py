@@ -32,7 +32,7 @@ async def owotext(self, back, chan):
 
 async def init(self):
   self.owolog = {}
-  self.raw['owolog'] = owologger
+  self.rawm['owolog'] = owologger
   self.cmd['owo'] = owoify
   self.help['owo'] = ['owo [num] - owoify the text', 'owo owo uwu']
 

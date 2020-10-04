@@ -2,14 +2,17 @@ import random
 
 
 async def coffeeup(self,c,n,m):
-    if c in ['#coffee','#tea','#water']:
+    if c in ['#coffee','#tea','#water','#CAPS']:
         if (c[1:]+"!" in m and c+'!' not in m) or c=='#coffee' and ('latte!' in m or 'espresso!' in m):
             cc = self.coffee.find_one(name=c)
             if cc:
                 self.coffee.update(dict(name=c,value=cc['value']+1),['name'])
             else:
                 self.coffee.insert(dict(name=c,value=1))
-            await self.message(c, '[\x036drinks\x0f] ・゜゜・。。・゜゜c[~] {} UP!'.format(c[1:].upper()))
+            if c=='#CAPS':
+                await self.message(c, '[\x036drinks\x0f] ・゜゜・。。・゜゜c[~] {} UP!'.format(c[1:].upper()).upper())
+            else:
+                await self.message(c, '[\x036drinks\x0f] ・゜゜・。。・゜゜c[~] {} UP!'.format(c[1:].upper()))
         elif "cupcount" in m:
             await self.message(c, '[\x036drinks\x0f] {} delicious cups of {}{} served so far!'.format(
                 self.coffee.find_one(name=c)['value'], random.choice(self.coffeetypes), c[1:]
@@ -19,7 +22,7 @@ async def coffeeup(self,c,n,m):
 
 
 async def init(self):
-    self.raw['coffeeup'] = coffeeup
+    self.rawm['coffeeup'] = coffeeup
     self.coffee = self.db['coffee']
 
     self.coffeetypes = [

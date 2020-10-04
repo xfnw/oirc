@@ -11,6 +11,6 @@ async def source(self,c,n,m):
 async def init(self):
   self.help['modules'] = ['modules - list the modules',':o']
   self.cmd['modules'] = listMods
-  self.raw['source'] = source
+  self.rawm['source'] = source
 
 

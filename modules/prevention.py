@@ -32,5 +32,5 @@ async def init(self):
   self.plog = {}
   self.wlevel = {}
   self.mutesyntax = ['+b','m:{}'] # ['+q','{}'] on freenode
-  self.raw['preventionlog'] = plogger
+  self.rawm['preventionlog'] = plogger
 

@@ -23,7 +23,7 @@ async def getPronouns(self,c,n,m):
         await self.message(c,'[\x036scrape\x0f] sorry i could not find {}\'s pronouns. (i scrape pronouns from logs, you dont need to set them :3 )'.format(m))
 
 async def init(self):
-    self.raw['scraper'] = scraper
+    self.rawm['scraper'] = scraper
     self.pronoundb = self.db['pronouns']
 
     self.cmd['pronouns'] = getPronouns
