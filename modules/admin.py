@@ -94,11 +94,56 @@ async def addalias(self,c,n,m):
     await self.message(c,'[\x036admin\x0f] added "{}" alias for "{}"'.format(al,m))
 
 
+async def addot(self,c,n,m):
+    al = m.split(' ')[0]
+    m = m[len(al)+1:] # dont use the list since i want trailing spaces
+    if al in self.rawm:
+        await self.message(c,'[\x036admin\x0f] no dont overwrite a command dummy')
+        return
+    self.rawm[al]=Ot(m,al).ot
+
+    await self.message(c,'[\x036admin\x0f] added "{}" trigger for "{}"'.format(al,m))
+
+
+
+async def addtrigger(self,c,n,m):
+    al = m.split(' ')[0]
+    m = m[len(al)+1:] # dont use the list since i want trailing spaces
+    if al in self.rawm:
+        await self.message(c,'[\x036admin\x0f] no dont overwrite a command dummy')
+        return
+    self.rawm[al]=Trigger(m,al).trigger
+
+    await self.message(c,'[\x036admin\x0f] added "{}" trigger for "{}"'.format(al,m))
+
+
+
+class Ot():
+    def __init__(self, ms, al):
+        self.ms = str(ms)
+        self.al = str(al)
+    async def ot(alself,self,c,n,m):
+        if alself.al in m:
+            asyncio.create_task(self.on_message(c,n,alself.ms.format(m)))
+            self.rawm.pop(alself.al)
+
+
+
+
+class Trigger():
+    def __init__(self, ms, al):
+        self.ms = str(ms)
+        self.al = str(al)
+    async def trigger(alself,self,c,n,m):
+        if alself.al in m:
+            asyncio.create_task(self.on_message(c,n,alself.ms.format(m)))
+
+
 class Alias():
     def __init__(self, ms):
         self.ms = str(ms)
     async def alias(alself,self,c,n,m):
-        asyncio.create_task(self.parseCommand(c,n,alself.ms.format(m)))
+        asyncio.create_task(self.on_message(c,n,alself.ms.format(m)))
 
 
 
@@ -113,7 +158,9 @@ commands = {
   'joins': joins,
   'shut': shut,
   'schans': schans,
-  'addalias': addalias
+  'addalias': addalias,
+  'addtrigger': addtrigger,
+  'addot': addot,
 }
 
 async def adminHandle(self, chan, source, msg):
