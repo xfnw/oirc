@@ -13,6 +13,7 @@ class Balun(pydle.Client):
     self.help = {}
     self.db = dataset.connect('sqlite:///database.db')
     self.t=0
+    self.acceptInvites=True
 
     print('loading modules...')
     await self.loadMods()
@@ -35,6 +36,8 @@ class Balun(pydle.Client):
       self.modules[i] = m
 
   async def on_invite(self, channel, by):
+    if not self.acceptInvites:
+        return
     print('{} invited me to {}!'.format(by, channel))
     self.t = time.time()+1
     await self.join(channel)
