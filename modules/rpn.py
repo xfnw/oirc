@@ -14,7 +14,19 @@ async def rpninp(self, chan, nick, msg):
   if chan not in self.rpnhist:
     self.rpnhist[chan] = [0]
   try:
-    for m in msg.split(' '):
+    msg = msg.replace('+',' + ')
+    msg = msg.replace('a',' a ')
+    msg = msg.replace('-',' - ')
+    msg = msg.replace('s',' s ')
+    msg = msg.replace('\\',' \\ ')
+    msg = msg.replace('*',' * ')
+    msg = msg.replace('x',' x ')
+    msg = msg.replace('m',' m ')
+    msg = msg.replace('/',' / ')
+    msg = msg.replace('d',' d ')
+    msg = msg.replace('^',' ^ ')
+    msg = msg.replace('e',' e ')
+    for m in msg.split():
         self.rpnhist[chan].append(0)
         del self.rpnhist[chan][15:]
         if isfloat(m):
@@ -28,16 +40,13 @@ async def rpninp(self, chan, nick, msg):
           self.rpnhist[chan].insert(0,self.rpnhist[chan][0])
         elif m == '*' or m == 'x' or m == 'm':
           self.rpnhist[chan][0] =  self.rpnhist[chan].pop(1)*self.rpnhist[chan][0]
-
         elif m == '/' or m == 'd':
           try:
             self.rpnhist[chan][0] =  self.rpnhist[chan].pop(1)/self.rpnhist[chan][0]
           except ZeroDivisionError:
             self.rpnhist[chan][0] = float('NaN')
-
         elif m == '^' or m == 'e':
           self.rpnhist[chan][0] =  self.rpnhist[chan].pop(1)**self.rpnhist[chan][0]
-
         elif msg == 'p':
           pass # just dont do anything lol
         elif msg == 'r':
@@ -53,6 +62,16 @@ async def rpninp(self, chan, nick, msg):
   if chan in self.rpnprint:
     await self.message(chan, '[\x036rpn\x0f] '+str(self.rpnhist[chan][0]))
 
+
+async def rpntinp(self, chan, nick, msg):
+  if chan in self.rpnprint:
+    
+    await rpninp(self, chan, nick, msg)
+  else:
+    self.rpnprint.append(chan)
+    await rpninp(self, chan, nick, msg)
+    self.rpnprint.remove(chan)
+
 async def rpntoggle(self, chan, nick, msg):
   if chan in self.rpnprint:
     self.rpnprint.remove(chan)
@@ -63,8 +82,8 @@ async def rpntoggle(self, chan, nick, msg):
 
 async def init(self):
   self.help['rpn'] = ['rpn <inp> - simple reverse polish notation calculator (more)', 'it has an alias of . so you can just do {}. <inp>, and if enabled it will also parse floats and functions as input. there are 4 functions, add (+|a), subtract (-|s), multiply (*|x|m), and devide (/|d), and p to print register 0'.format(self.prefix)]
-  self.cmd['rpn'] = rpninp
-  self.cmd['.'] = rpninp
+  self.cmd['rpn'] = rpntinp
+  self.cmd['.'] = rpntinp
   self.rawm['rpn'] = rpninp
   self.cmd['rt'] = rpntoggle
   self.help['rt'] = ['rt - toggle the output of rpn calculatons into the channel', 'rpn is cool']
