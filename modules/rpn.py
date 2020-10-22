@@ -24,6 +24,8 @@ async def rpninp(self, chan, nick, msg):
           self.rpnhist[chan][0] = self.rpnhist[chan][0]+self.rpnhist[chan].pop(1)
         elif m == '-' or m == 's':
           self.rpnhist[chan][0] =  self.rpnhist[chan].pop(1)-self.rpnhist[chan][0]
+        elif m == '\\':
+          self.rpnhist[chan].insert(0,self.rpnhist[chan][0])
         elif m == '*' or m == 'x' or m == 'm':
           self.rpnhist[chan][0] =  self.rpnhist[chan].pop(1)*self.rpnhist[chan][0]
 
