@@ -2,7 +2,7 @@ import random
 
 
 async def coffeeup(self,c,n,m):
-    if c in ['#coffee','#tea','#water','#CAPS']:
+    if c in ['#coffee','#tea','#water','#CAPS','#sodawater']:
         if (c[1:]+"!" in m and c+'!' not in m) or c=='#coffee' and ('latte!' in m or 'espresso!' in m or 'cappucino!' in m) or c=='#tea' and ('chai!' in m):
             cc = self.coffee.find_one(name=c)
             if cc:
