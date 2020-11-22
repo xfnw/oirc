@@ -1,14 +1,6 @@
 
-
-
-def is_admin(func):
-    async def decorator(self,channel,nick,message):
-        if nick.lower() in self.users and self.users[nick.lower()].account in self.admins:
-            await self.send_raw("PRIVMSG #bots :test")
-    return decorator
-        
-
-#def is_chanop(func):
+from irctokens import build, Line
+import bot
 
 
 async def init(self):

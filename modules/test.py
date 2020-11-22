@@ -1,13 +1,14 @@
 import asyncio 
-import modules.core as core
+from bot import *
 
-@core.is_admin
-async def testy(self,channel,nick,message):
-    pass
+@command('test')
+@is_admin
+async def testy(self,channel,nick,msg):
+    await message(self,'test',channel,str(bot.hi))
+    bot.hi += 1
 
 async def init(self):
 
     await self.send_raw("join #bots")
-    await asyncio.sleep(5)
-    await testy(self,'#bots','xfnw','hi')
+    
 
