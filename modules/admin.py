@@ -1,13 +1,17 @@
 
-import importlib, time, asyncio
+import importlib, time, asyncio, random
 from bot import *
+
+quitmessages = [
+        "test"
+        ]
 
 
 async def commit(self, chan, source, msg):
   await self.quit('{} told me to commit {}'.format(source,msg))
 
 async def quit(self, chan, source, msg):
-  await self.quit('{} told me to {}'.format(source,msg))
+  await self.send(build("QUIT",[random.choice(quitmessages)]))
 
 
 
@@ -16,7 +20,7 @@ async def reloadmods(self, chan, source, msg):
   shared.oldcmd = shared.commands
   shared.commands = {}
   shared.rawm = {}
-  shared.listeners = {}
+  shared.listeners = []
   shared.help = {}
   try:
     for i in shared.modules:
@@ -38,7 +42,7 @@ async def joins(self, chan, source, msg):
     await self.send(build("JOIN",[i['name']]))
     await asyncio.sleep(1)
     print('joined {}'.format(i['name']))
-  await self.message(chan, '[\x036admin\x0f] Sucess!')
+  await self.message(chan, '[\x036admin\x0f] Sucess! i may be laggy for a bit while i sort through all these channels...')
 
 async def aexec(self, code):
     # Make an async function with the code and `exec` it
