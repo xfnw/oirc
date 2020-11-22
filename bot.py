@@ -38,6 +38,10 @@ async def message(self,modname,channel,msg):
     await self.send(build("PRIVMSG",[channel,f'[\x036{modname}\x0f] {msg}']))
 
 
+@command('anothertest')
+async def anothertest(self,c,n,m):
+    await message(self,'self',c,'hello')
+
 
 class Server(BaseServer):
     async def line_read(self, line: Line):
