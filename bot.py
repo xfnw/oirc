@@ -8,14 +8,7 @@ from ircrobots import Server as BaseServer
 from ircrobots import ConnectionParams, SASLUserPass, SASLSCRAM
 
 from auth import username, password
-
-prefix = '.'
-modules = {}
-listeners = []
-commands = {}
-rawm = {}
-
-
+import shared
 
 def is_admin(func):
     async def decorator(self,channel,nick,msg):
@@ -27,8 +20,7 @@ def is_admin(func):
 
 def command(commandname):
     def decorator(func):
-        commands[commandname] = func
-        print(commands, 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+        shared.commands[commandname] = func
         return func
     return decorator
 
@@ -38,9 +30,6 @@ async def message(self,modname,channel,msg):
     await self.send(build("PRIVMSG",[channel,f'[\x036{modname}\x0f] {msg}']))
 
 
-@command('anothertest')
-async def anothertest(self,c,n,m):
-    await message(self,'self',c,'hello')
 
 
 class Server(BaseServer):
@@ -48,7 +37,7 @@ class Server(BaseServer):
         print(f"{self.name} < {line.format()}")
         if 'on_'+line.command.lower() in dir(self):
             asyncio.create_task(self.__getattribute__('on_'+line.command.lower())(line))
-        for listener in listeners:
+        for listener in shared.listeners:
             if listener[0] == line.command:
                 asyncio.create_task(listener[1](self,line))
     
@@ -65,7 +54,7 @@ class Server(BaseServer):
             i = i[:-3]
             m = importlib.import_module('modules.' + i)
             asyncio.create_task(m.init(self))
-            modules[i] = m
+            shared.modules[i] = m
 
     async def on_privmsg(self, line):
         channel = line.params[0]
@@ -75,24 +64,23 @@ class Server(BaseServer):
         await self.handle_rawm(channel,nick,msg)
         await self.handle_command(channel,nick,msg)
     async def handle_rawm(self,channel,nick,msg):
-        for i in rawm:
-            await rawm[i](self,channel,nick,msg)
+        for i in shared.rawm:
+            await shared.rawm[i](self,channel,nick,msg)
     async def handle_command(self,channel,nick,msg):
-        if msg[:len(prefix)] == prefix:
-            msg = msg[len(prefix):]
+        if msg[:len(shared.prefix)] == shared.prefix:
+            msg = msg[len(shared.prefix):]
             cmd = msg.split(' ')[0]
             msg = msg[len(cmd)+1:]
             if len(cmd) < 1:
                 return
 
-            print(commands)
-            if cmd in commands:
-                await commands[cmd](self,channel,nick,msg)
+            if cmd in shared.commands:
+                await shared.commands[cmd](self,channel,nick,msg)
                 return
 
-            results = [i for i in commands if i.startswith(cmd)]
+            results = [i for i in shared.commands if i.startswith(cmd)]
             if len(results) == 1:
-                await commands[results[0]](self,channel,nick,msg)
+                await sharedcommands[results[0]](self,channel,nick,msg)
 
 
 class Bot(BaseBot):

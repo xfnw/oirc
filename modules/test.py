@@ -1,11 +1,11 @@
 import asyncio 
-from bot import *
+import bot
 
-@command('test')
-@is_admin
+
+@bot.command('test')
+@bot.is_admin
 async def testy(self,channel,nick,msg):
-    await message(self,'test',channel,str(bot.hi))
-    bot.hi += 1
+    await bot.message(self,'test',channel,'hi there')
 
 async def init(self):
 
