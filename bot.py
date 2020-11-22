@@ -63,8 +63,7 @@ class Server(BaseServer):
     async def load_modules(self):
         for i in [s for s in os.listdir('modules') if '.py' in s and '.swp' not in s]:
             i = i[:-3]
-            m = __import__('modules.' + i)
-            m = eval('m.' + i)
+            m = importlib.import_module('modules.' + i)
             asyncio.create_task(m.init(self))
             modules[i] = m
 
