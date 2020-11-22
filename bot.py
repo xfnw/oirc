@@ -18,13 +18,28 @@ def is_admin(func):
             await message(self,'core',channel,'you do not have permission to do that')
     return decorator
 
+#def is_chanop(func):
+
+
 def command(commandname):
     def decorator(func):
         shared.commands[commandname] = func
         return func
     return decorator
 
-#def is_chanop(func):
+def listener(listenername):
+    def decorator(func):
+        shared.listeners.append((listenername, func))
+        return func
+    return decorator
+
+def rawm(rname):
+    def decorator(func):
+        shared.rawm[rname] = func
+        return func
+    return decorator
+
+
 
 async def message(self,modname,channel,msg):
     await self.send(build("PRIVMSG",[channel,f'[\x036{modname}\x0f] {msg}']))
@@ -56,10 +71,22 @@ class Server(BaseServer):
             asyncio.create_task(m.init(self))
             shared.modules[i] = m
 
+    # depricated, to support old modules
+    async def message(self,channel,msg):
+        await self.send(build("PRIVMSG",[channel,msg]))
+
+
     async def on_privmsg(self, line):
+        if line.tags and "batch" in line.tags and line.tags["batch"] == '1':
+            return
+
+
         channel = line.params[0]
         nick = line.source.split('!')[0]
         msg = line.params[1]
+
+        if channel == self.nickname:
+            channel = nick
 
         await self.handle_rawm(channel,nick,msg)
         await self.handle_command(channel,nick,msg)
@@ -80,7 +107,7 @@ class Server(BaseServer):
 
             results = [i for i in shared.commands if i.startswith(cmd)]
             if len(results) == 1:
-                await sharedcommands[results[0]](self,channel,nick,msg)
+                await shared.commands[results[0]](self,channel,nick,msg)
 
 
 class Bot(BaseBot):
