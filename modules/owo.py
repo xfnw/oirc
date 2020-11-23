@@ -1,9 +1,9 @@
-
+from bot import *
 import random
 
 async def owologger(self,c,n,m):
   print("<{} {}> {}".format(c,n,m))
-  if m[:len(self.prefix)] == self.prefix:
+  if m[:len(shared.prefix)] == shared.prefix:
     return
   if c not in self.owolog:
     self.owolog[c] = []
@@ -32,7 +32,7 @@ async def owotext(self, back, chan):
 
 async def init(self):
   self.owolog = {}
-  self.rawm['owolog'] = owologger
-  self.cmd['owo'] = owoify
-  self.help['owo'] = ['owo [num] - owoify the text', 'owo owo uwu']
+  shared.rawm['owolog'] = owologger
+  shared.commands['owo'] = owoify
+  #self.help['owo'] = ['owo [num] - owoify the text', 'owo owo uwu']
 

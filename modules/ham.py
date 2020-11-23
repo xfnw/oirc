@@ -1,7 +1,7 @@
-
+from bot import *
 import json, requests
 
-
+@command('lookup')
 async def lookup(self,c,n,m):
   if len(m) < 1:
     await self.message(c, '[\x036ham\x0f] you need the callsign lol')
@@ -18,7 +18,7 @@ async def lookup(self,c,n,m):
 
 
 async def init(self):
-  self.cmd['lookup'] = lookup
-  self.help['lookup'] = ['lookup <callsign> - lookup a ham callsign','ROBERT']
+  pass
+  #self.help['lookup'] = ['lookup <callsign> - lookup a ham callsign','ROBERT']
 
 
