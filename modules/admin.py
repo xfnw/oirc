@@ -3,7 +3,11 @@ import importlib, time, asyncio, random
 from bot import *
 
 quitmessages = [
-        "test"
+        "time to die",
+        'you can hide, but you can not run!',
+        "you're next",
+        'bye',
+        'the balun has been popped.',
         ]
 
 

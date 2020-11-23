@@ -1,5 +1,6 @@
-import modules.identify as ident
 import asyncio
+from bot import *
+
 
 async def bal(self):
     bals = {}
@@ -32,12 +33,12 @@ async def send(self,c,n,m):
         await self.message(c, '[\x036coin\x0f] invalid syntax')
         return
     try:
-        to = await ident.user(self, m.pop(0))
+        to = self.users[m.pop(0).lower()].account
     except:
         await self.message(c, '[\x036coin\x0f] that user is not logged in. refusing so coins are not lost')
     amount = round(float(m.pop(0)),2)
     message = ' '.join(m)
-    sender = await ident.user(self, n)
+    sender = self.users[n.lower()].account
 
     self.ledger.insert(dict(to=to,sender=sender,amount=amount,message=message))
 
@@ -48,7 +49,7 @@ async def balance(self,c,n,m):
     if len(m) < 1:
         m = n
     try:
-        m = await ident.user(self, m)
+        m = self.users[m.lower()].account
     except:
         m = m
     bals = await bal(self)
@@ -76,16 +77,16 @@ async def richest(self,c,n,m):
         ))
 
 async def init(self):
-    self.ledger = self.db['ledger']
+    self.ledger = shared.db['ledger']
     self.initfund = 1
 
-    self.cmd['tipcoins'] = send
-    self.cmd['sendcoins'] = send
-    self.cmd['balance'] = balance
-    self.cmd['richest'] = richest
+    shared.commands['tipcoins'] = send
+    shared.commands['sendcoins'] = send
+    shared.commands['balance'] = balance
+    shared.commands['richest'] = richest
 
 
-
+    return
     self.help['sendcoins'] = ['sendcoins <recipient> <amount> [message] - send someone coins. note (more)','this does NOT verify transactions went through!! check your balance after']
     self.help['balance'] = ['balance [person] - check someone\'s balance','coins owo']
     self.help['richest'] = ['richest - who has the most coins','coins owo']

@@ -1,6 +1,6 @@
 
 import subprocess
-
+from bot import *
 
 def isfloat(value):
   try:
@@ -16,7 +16,7 @@ async def rpninp(self, chan, nick, msg):
   try:
     msg = msg.replace('+',' + ')
     msg = msg.replace('a',' a ')
-    msg = msg.replace('-',' - ')
+    #msg = msg.replace('-',' - ')
     msg = msg.replace('s',' s ')
     msg = msg.replace('\\',' \\ ')
     msg = msg.replace('*',' * ')
@@ -81,12 +81,12 @@ async def rpntoggle(self, chan, nick, msg):
     await self.message(chan, '[\x036rpn\x0f] rpn outputting has been enabled') 
 
 async def init(self):
-  self.help['rpn'] = ['rpn <inp> - simple reverse polish notation calculator (more)', 'it has an alias of . so you can just do {}. <inp>, and if enabled it will also parse floats and functions as input. there are 4 functions, add (+|a), subtract (-|s), multiply (*|x|m), and devide (/|d), and p to print register 0'.format(self.prefix)]
-  self.cmd['rpn'] = rpntinp
-  self.cmd['.'] = rpntinp
-  self.rawm['rpn'] = rpninp
-  self.cmd['rt'] = rpntoggle
-  self.help['rt'] = ['rt - toggle the output of rpn calculatons into the channel', 'rpn is cool']
+  #self.help['rpn'] = ['rpn <inp> - simple reverse polish notation calculator (more)', 'it has an alias of . so you can just do {}. <inp>, and if enabled it will also parse floats and functions as input. there are 4 functions, add (+|a), subtract (-|s), multiply (*|x|m), and devide (/|d), and p to print register 0'.format(self.prefix)]
+  shared.commands['rpn'] = rpntinp
+  shared.commands['.'] = rpntinp
+  shared.rawm['rpn'] = rpninp
+  shared.commands['rt'] = rpntoggle
+  #self.help['rt'] = ['rt - toggle the output of rpn calculatons into the channel', 'rpn is cool']
 
   self.rpnhist = {}
 
