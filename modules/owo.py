@@ -1,4 +1,4 @@
-
+from bot import *
 import random
 
 async def owologger(self,c,n,m):
@@ -32,7 +32,7 @@ async def owotext(self, back, chan):
 
 async def init(self):
   self.owolog = {}
-  self.rawm['owolog'] = owologger
-  self.cmd['owo'] = owoify
-  self.help['owo'] = ['owo [num] - owoify the text', 'owo owo uwu']
+  shared.rawm['owolog'] = owologger
+  shared.commands['owo'] = owoify
+  #self.help['owo'] = ['owo [num] - owoify the text', 'owo owo uwu']
 

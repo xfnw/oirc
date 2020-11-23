@@ -1,4 +1,4 @@
-
+from bot import *
 import random
 
 async def getkeep(self,c,n,m):
@@ -72,18 +72,18 @@ async def rmkeep(self,c,n,m):
     await self.message(c,'[\x036keep\x0f] you must have +o in #balun')
 
 async def init(self):
-  self.keepdb = self.db['keep']
+  self.keepdb = shared.db['keep']
 
-  self.cmd['keep'] = getkeep
-  self.help['keep'] = ['keep - get keeps about keep','lets learn about keep!']
+  shared.commands['keep'] = getkeep
+  #self.help['keep'] = ['keep - get keeps about keep','lets learn about keep!']
   
-  self.cmd['addkeep'] = addkeep
-  self.help['addkeep'] = ['addkeep <keep> - add a new keep (more)','if you find something offensive contact lickthecheese, he can remove it and/or tell you who added it so watch out!']
+  shared.commands['addkeep'] = addkeep
+  #self.help['addkeep'] = ['addkeep <keep> - add a new keep (more)','if you find something offensive contact lickthecheese, he can remove it and/or tell you who added it so watch out!']
 
-  self.cmd['grabkeep'] = grabkeep
-  self.help['grabkeep'] = ['grabkeep [back] - grab something to keep','tooootally did not steal this from bitbot']
+  shared.commands['grabkeep'] = grabkeep
+  #self.help['grabkeep'] = ['grabkeep [back] - grab something to keep','tooootally did not steal this from bitbot']
 
   self.rmkeepchan = "#balun"
-  self.cmd['rmkeep'] = rmkeep
-  self.help['rmkeep'] = ['rmkeep <criteria> <pattern> - remove some keep(s). criteria types in (more)','types of criteria: n|nick q|quote eg "rmkeep nick spammer" to get rid of all keeps created by nick spammer']
+  shared.commands['rmkeep'] = rmkeep
+  #self.help['rmkeep'] = ['rmkeep <criteria> <pattern> - remove some keep(s). criteria types in (more)','types of criteria: n|nick q|quote eg "rmkeep nick spammer" to get rid of all keeps created by nick spammer']
 
