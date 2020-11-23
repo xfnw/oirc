@@ -3,7 +3,7 @@ import random
 
 async def owologger(self,c,n,m):
   print("<{} {}> {}".format(c,n,m))
-  if m[:len(self.prefix)] == self.prefix:
+  if m[:len(shared.prefix)] == shared.prefix:
     return
   if c not in self.owolog:
     self.owolog[c] = []
