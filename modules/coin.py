@@ -36,6 +36,9 @@ async def send(self,c,n,m):
         to = self.users[m.pop(0).lower()].account
     except:
         await self.message(c, '[\x036coin\x0f] that user is not logged in. refusing so coins are not lost')
+    if to == '':
+        await self.message(c, '[\x036coin\x0f] they must authenticate with nickserv.')
+        return
     amount = round(float(m.pop(0)),2)
     message = ' '.join(m)
     sender = self.users[n.lower()].account
@@ -51,6 +54,8 @@ async def balance(self,c,n,m):
     try:
         m = self.users[m.lower()].account
     except:
+        m = m
+    if m == '':
         m = m
     bals = await bal(self)
     if m in bals:
