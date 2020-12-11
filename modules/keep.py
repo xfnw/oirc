@@ -51,7 +51,7 @@ async def addkeep(self,c,n,m):
   await self.message(c,'[\x036keep\x0f] keep added!')
 
 async def rmkeep(self,c,n,m):
-  if n in self.channels[self.rmkeepchan]['modes']['o']:
+  if n in self.channels[self.rmkeepchan].users and 'o' in self.channels[self.rmkeepchan].users[n].modes:
     co = m.strip().split(' ')
     if len(co) < 2:
       await self.message(c,'[\x036keep\x0f] wrong syntax')
