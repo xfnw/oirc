@@ -163,7 +163,6 @@ commands = {
 }
 
 @command('admin')
-@is_admin
 async def adminHandle(self, chan, source, msg):
     msg = msg.split(' ')
     if len(msg) < 1 or not msg[0] in commands:
