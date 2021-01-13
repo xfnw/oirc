@@ -69,7 +69,7 @@ async def rmkeep(self,c,n,m):
     else:
       await self.message(c, '[\x036keep\x0f] did not remove any')
   else:
-    await self.message(c,'[\x036keep\x0f] you must have +o in #balun')
+    await self.message(c,f'[\x036keep\x0f] you must have +o in {self.rmkeepchan}')
 
 async def init(self):
   self.keepdb = shared.db['keep']
