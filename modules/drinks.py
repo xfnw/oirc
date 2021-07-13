@@ -18,11 +18,11 @@ async def coffeeup(self,c,n,m):
             else:
                 self.coffee.insert(dict(name=c,value=1))
             if c=='#CAPS':
-                await self.message(c, '[\x036drinks\x0f] ・゜゜・。。・゜゜c[~] {} UP!'.format(c[1:].upper()).upper())
+                await message(self, c, '・゜゜・。。・゜゜c[~] {} UP!'.format(c[1:].upper()).upper())
             else:
-                await self.message(c, '[\x036drinks\x0f] ・゜゜・。。・゜゜c[~] {} UP!'.format(c[1:].upper()))
+                await message(self, c, '・゜゜・。。・゜゜c[~] {} UP!'.format(c[1:].upper()))
         elif "cupcount" in m:
-            await self.message(c, '[\x036drinks\x0f] {} delicious cups of {}{} served so far!'.format(
+            await message(self, c, '{} delicious cups of {}{} served so far!'.format(
                 self.coffee.find_one(name=c)['value'], random.choice(self.coffeetypes), c[1:]
                 ))
 

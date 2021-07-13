@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import asyncio, os, importlib
+import asyncio, os, importlib, inspect
 
 from irctokens import build, Line
 from ircrobots import Bot as BaseBot
@@ -15,7 +15,7 @@ def is_admin(func):
         if nick.lower() in self.users and self.users[nick.lower()].account in self.admins:
             await func(self,channel,nick,msg)
         else:
-            await message(self,'core',channel,'you do not have permission to do that')
+            await message(self,channel,'you do not have permission to do that')
     return decorator
 
 #def is_chanop(func):
@@ -41,7 +41,8 @@ def rawm(rname):
 
 
 
-async def message(self,modname,channel,msg):
+async def message(self,channel,msg):
+    modname = os.path.splitext(os.path.basename(inspect.stack()[1].filename))[0]
     await self.send(build("PRIVMSG",[channel,f'[\x036{modname}\x0f] {msg}']))
 
 
