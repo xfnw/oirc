@@ -50,14 +50,14 @@ async def message(self,channel,msg):
 
 class Server(BaseServer):
     async def line_read(self, line: Line):
-        print(f"{self.name} < {line.format()}")
         if 'on_'+line.command.lower() in dir(self):
             asyncio.create_task(self.__getattribute__('on_'+line.command.lower())(line))
         for listener in shared.listeners:
             if listener[0] == line.command:
                 asyncio.create_task(listener[1](self,line))
-    
-    async def line_send(self, line: Line):
+    async def line_preread(self, line: Line):
+        print(f"{self.name} < {line.format()}")
+    async def line_presend(self, line: Line):
         print(f"{self.name} > {line.format()}")
 
 
