@@ -1,11 +1,8 @@
-
 import dataset
 
-prefix = '.'
+prefix = "."
 modules = {}
 listeners = []
 commands = {}
 rawm = {}
-db = dataset.connect('sqlite:///database.db')
-
-
+db = dataset.connect("sqlite:///database.db")

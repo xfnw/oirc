@@ -9,9 +9,9 @@ from typing import Dict, List, Optional, Pattern, Tuple
 from dataclasses import dataclass
 
 from async_timeout import timeout as timeout_
-from OpenSSL       import crypto
+from OpenSSL import crypto
 
-#from .config       import CertPattern
+# from .config       import CertPattern
 
 
 @dataclass
@@ -20,25 +20,20 @@ class CertPattern(object):
     find: List[Pattern]
 
 
-
-CERT_KEYS = [
-    ("CN", "cn"),
-    ("O",  "on")
-]
+CERT_KEYS = [("CN", "cn"), ("O", "on")]
 
 TLS = ssl.SSLContext(ssl.PROTOCOL_TLS)
 
+
 def _bytes_dict(d: List[Tuple[bytes, bytes]]) -> Dict[str, str]:
     return {k.decode("utf8"): v.decode("utf8") for k, v in d}
+
 
 class CertScanner(object):
     def __init__(self, timeout: int = 5):
         self._timeout = timeout
 
-    async def _values(self,
-            ip:   str,
-            port: int
-            ) -> List[Tuple[str, str]]:
+    async def _values(self, ip: str, port: int) -> List[Tuple[str, str]]:
         reader, writer = await asyncio.open_connection(ip, port, ssl=TLS)
         cert = writer.transport._ssl_protocol._sslpipe.ssl_object.getpeercert(True)
         writer.close()
@@ -47,7 +42,7 @@ class CertScanner(object):
         x509 = crypto.load_certificate(crypto.FILETYPE_ASN1, cert)
 
         subject = _bytes_dict(x509.get_subject().get_components())
-        issuer  = _bytes_dict(x509.get_issuer().get_components())
+        issuer = _bytes_dict(x509.get_issuer().get_components())
 
         values: List[Tuple[str, str]] = []
         for cert_key, match_key in CERT_KEYS:
@@ -65,18 +60,14 @@ class CertScanner(object):
 
         return values
 
-
-    async def _match(self,
-            ip:    str,
-            port:  int,
-            certs: List[CertPattern]
-            ) -> Optional[str]:
+    async def _match(
+        self, ip: str, port: int, certs: List[CertPattern]
+    ) -> Optional[str]:
 
         try:
             async with timeout_(self._timeout):
                 values_t = await self._values(ip, port)
-        except (asyncio.TimeoutError,
-                ConnectionError):
+        except (asyncio.TimeoutError, ConnectionError):
             pass
         except Exception as e:
             traceback.print_exc()
@@ -89,10 +80,7 @@ class CertScanner(object):
                             return f"{value} (:{port} {cert.name})"
         return None
 
-    async def scan(self,
-            ip:  str,
-            bad: Dict[int, List[CertPattern]]
-            ) -> Optional[str]:
+    async def scan(self, ip: str, bad: Dict[int, List[CertPattern]]) -> Optional[str]:
         coros = [self._match(ip, p, c) for p, c in bad.items()]
         tasks = set(asyncio.ensure_future(c) for c in coros)
         while tasks:
@@ -110,4 +98,3 @@ class CertScanner(object):
                     return result
             tasks = set(asyncio.ensure_future(f) for f in unfinished)
         return None
-
