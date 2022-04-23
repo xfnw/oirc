@@ -5,7 +5,7 @@ import json, requests
 @command("lookup")
 async def lookup(self, c, n, m):
     if len(m) < 1:
-        await self.message(c, "[\x036ham\x0f] you need the callsign lol")
+        await self.message(c, "you need the callsign lol")
         return
     res = requests.get("https://callook.info/{}/json".format(m))
     if res.status_code:
@@ -13,7 +13,7 @@ async def lookup(self, c, n, m):
         if js["status"] == "VALID":
             await self.message(
                 c,
-                "[\x036ham\x0f] {}, name: {} grid: {}, expires: {}".format(
+                "{}, name: {} grid: {}, expires: {}".format(
                     js["current"]["operClass"],
                     js["name"],
                     js["location"]["gridsquare"],
@@ -21,9 +21,9 @@ async def lookup(self, c, n, m):
                 ),
             )
             return
-        await self.message(c, "[\x036ham\x0f] invalid callsign")
+        await self.message(c, "invalid callsign")
     else:
-        await self.message(c, "[\x036ham\x0f] something went wrong...")
+        await self.message(c, "something went wrong...")
 
 
 async def init(self):

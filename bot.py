@@ -52,7 +52,7 @@ def rawm(rname):
 
 
 async def message(self, channel, msg):
-    modname = os.path.splitext(os.path.basename(inspect.stack()[1].filename))[0]
+    modname = os.path.splitext(os.path.basename(inspect.stack()[:2][-1].filename))[0]
     await self.send(build("PRIVMSG", [channel, f"[\x036{modname}\x0f] {msg}"]))
 
 
@@ -82,9 +82,9 @@ class Server(BaseServer):
             asyncio.create_task(m.init(self))
             shared.modules[i] = m
 
-    # depricated, to support old modules
     async def message(self, channel, msg):
-        await self.send(build("PRIVMSG", [channel, msg]))
+        modname = os.path.splitext(os.path.basename(inspect.stack()[:2][-1].filename))[0]
+        await self.send(build("PRIVMSG", [channel, f"[\x036{modname}\x0f] {msg}"]))
 
     async def on_privmsg(self, line):
         if line.tags and "batch" in line.tags and line.tags["batch"] == "1":

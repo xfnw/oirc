@@ -62,17 +62,17 @@ async def rpninp(self, chan, nick, msg):
             elif msg == "r":
                 if chan in self.rpnprint:
                     await self.message(
-                        chan, "[\x036rpn\x0f] {}".format(str(self.rpnhist[chan]))
+                        chan, str(self.rpnhist[chan])
                     )
                 return
             else:
                 return
     except OverflowError:
         if chan in self.rpnprint:
-            await self.message(chan, "[\x036rpn\x0f] no u ur numbers are too phat")
+            await self.message(chan, "no u ur numbers are too big chonk")
         return
     if chan in self.rpnprint:
-        await self.message(chan, "[\x036rpn\x0f] " + str(self.rpnhist[chan][0]))
+        await self.message(chan, str(self.rpnhist[chan][0]))
 
 
 async def rpntinp(self, chan, nick, msg):
@@ -88,10 +88,10 @@ async def rpntinp(self, chan, nick, msg):
 async def rpntoggle(self, chan, nick, msg):
     if chan in self.rpnprint:
         self.rpnprint.remove(chan)
-        await self.message(chan, "[\x036rpn\x0f] rpn outputting has been disabled")
+        await self.message(chan, "rpn outputting has been disabled")
     else:
         self.rpnprint.append(chan)
-        await self.message(chan, "[\x036rpn\x0f] rpn outputting has been enabled")
+        await self.message(chan, "rpn outputting has been enabled")
 
 
 async def init(self):

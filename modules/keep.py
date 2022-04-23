@@ -12,9 +12,9 @@ async def getkeep(self, c, n, m):
                 [i["keep"] for i in self.keepdb.find(keep={"like": "%{}%".format(m)})]
             )
         except IndexError:
-            await self.message(c, "[\x036keep\x0f] No keeps found.")
+            await self.message(c, "No keeps found.")
             return
-    await self.message(c, "[\x036keep\x0f] {}".format(keep))
+    await self.message(c, keep)
 
 
 async def grabkeep(self, c, n, m):
@@ -27,7 +27,7 @@ async def grabkeep(self, c, n, m):
         if c in self.owolog:
             backlog = [i for i in self.owolog[c] if m[0] == i[0]]
             if len(backlog) < 1:
-                await self.message(c, "[\x036keep\x0f] nothing found to keep")
+                await self.message(c, "nothing found to keep")
                 return
             try:
                 ms = backlog[0 - int(m[1])]
@@ -35,23 +35,23 @@ async def grabkeep(self, c, n, m):
                 ms = backlog[-1]
             m = "<{}> {}".format(ms[0], ms[1])
             self.keepdb.insert(dict(channel=c, nick=n, keep=m))
-            await self.message(c, "[\x036keep\x0f] keep added!")
+            await self.message(c, "keep added!")
         return
     if c in self.owolog and len(self.owolog[c]) >= back:
         ms = self.owolog[c][0 - back]
         m = "<{}> {}".format(ms[0], ms[1])
     else:
         await self.message(
-            c, "[\x036keep\x0f] My backlog does not go back that far ;_;]"
+            c, "My backlog does not go back that far ;_;]"
         )
         return
     self.keepdb.insert(dict(channel=c, nick=n, keep=m))
-    await self.message(c, "[\x036keep\x0f] keep added!")
+    await self.message(c, "keep added!")
 
 
 async def addkeep(self, c, n, m):
     self.keepdb.insert(dict(channel=c, nick=n, keep=m))
-    await self.message(c, "[\x036keep\x0f] keep added!")
+    await self.message(c, "keep added!")
 
 
 async def rmkeep(self, c, n, m):
@@ -61,7 +61,7 @@ async def rmkeep(self, c, n, m):
     ):
         co = m.strip().split(" ")
         if len(co) < 2:
-            await self.message(c, "[\x036keep\x0f] wrong syntax")
+            await self.message(c, "wrong syntax")
             return
         crit = co.pop(0)
         filt = " ".join(co)
@@ -70,13 +70,13 @@ async def rmkeep(self, c, n, m):
         elif crit == "quote" or crit == "q":
             ou = self.keepdb.delete(keep={"like": filt})
         else:
-            await self.message(c, "[\x036keep\x0f] invalid criterea")
+            await self.message(c, "invalid criterea")
         if ou:
-            await self.message(c, "[\x036keep\x0f] removed some keep(s)")
+            await self.message(c, "removed some keep(s)")
         else:
-            await self.message(c, "[\x036keep\x0f] did not remove any")
+            await self.message(c, "did not find any to remove")
     else:
-        await self.message(c, f"[\x036keep\x0f] you must have +o in {self.rmkeepchan}")
+        await self.message(c, f"you must have +o in {self.rmkeepchan}")
 
 
 async def init(self):

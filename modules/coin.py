@@ -31,17 +31,17 @@ async def bal(self):
 async def send(self, c, n, m):
     m = m.split(" ")
     if len(m) < 2:
-        await self.message(c, "[\x036coin\x0f] invalid syntax")
+        await self.message(c, "invalid syntax")
         return
     try:
         to = self.users[m.pop(0).lower()].account
     except:
         await self.message(
             c,
-            "[\x036coin\x0f] that user is not logged in. refusing so coins are not lost",
+            "that user is not logged in. refusing so coins are not lost",
         )
     if to == "":
-        await self.message(c, "[\x036coin\x0f] they must authenticate with nickserv.")
+        await self.message(c, "they must authenticate with nickserv.")
         return
     amount = round(float(m.pop(0)), 2)
     message = " ".join(m)
@@ -50,7 +50,7 @@ async def send(self, c, n, m):
     self.ledger.insert(dict(to=to, sender=sender, amount=amount, message=message))
 
     await self.message(
-        c, "[\x036coin\x0f] added transaction to ledger, check balances to verify"
+        c, "added transaction to ledger, check balances to verify"
     )
 
 
@@ -70,7 +70,7 @@ async def balance(self, c, n, m):
         if latest:
             await self.message(
                 c,
-                "[\x036coin\x0f] {}\u200c{}'s balance is {} BUTT (Balun Useless Trading Tokens), {}% of the total supply".format(
+                "{}\u200c{}'s balance is {} BUTT (Balun Useless Trading Tokens), {}% of the total supply".format(
                     m[:1],
                     m[1:],
                     round(bals[m], 2),
@@ -83,7 +83,7 @@ async def balance(self, c, n, m):
         else:
             await self.message(
                 c,
-                "[\x036coin\x0f] {}\u200c{}'s balance is {} BUTT (Balun Useless Trading Tokens), {}% of the total supply".format(
+                "{}\u200c{}'s balance is {} BUTT (Balun Useless Trading Tokens), {}% of the total supply".format(
                     m[:1],
                     m[1:],
                     round(bals[m], 2),
@@ -91,7 +91,7 @@ async def balance(self, c, n, m):
                 ),
             )
     else:
-        await self.message(c, "[\x036coin\x0f] this user has never made a transaction")
+        await self.message(c, "this user has never made a transaction")
 
 
 async def richest(self, c, n, m):
@@ -101,7 +101,7 @@ async def richest(self, c, n, m):
 
     await self.message(
         c,
-        "[\x036coin\x0f] richest users: "
+        "richest users: "
         + ", ".join(
             [
                 i[0][:1] + "\u200c" + i[0][1:] + ": " + str(round(i[1], 2))

@@ -19,7 +19,7 @@ async def quit(self, chan, source, msg):
 
 
 async def reloadmods(self, chan, source, msg):
-    await self.message(chan, "[\x036admin\x0f] reloading modules...")
+    await self.message(chan, "reloading modules...")
     shared.oldcmd = shared.commands
     shared.commands = {}
     shared.rawm = {}
@@ -29,14 +29,14 @@ async def reloadmods(self, chan, source, msg):
         for i in shared.modules:
             importlib.reload(shared.modules[i])
             await shared.modules[i].init(self)
-            # await self.message(chan, '[\x036admin\x0f] load {} sucess!'.format(i))
+            # await self.message(chan, 'load {} sucess!'.format(i))
         await self.message(
             chan,
-            "[\x036admin\x0f] done! {} modules reloaded!".format(len(shared.modules)),
+            "done! {} modules reloaded!".format(len(shared.modules)),
         )
     except:
         await self.message(
-            chan, "[\x036admin\x0f] reload failed... attempting to recover..."
+            chan, "reload failed... attempting to recover..."
         )
         shared.commands = shared.oldcmd
 
@@ -46,14 +46,14 @@ async def rawcmd(self, chan, source, msg):
 
 
 async def joins(self, chan, source, msg):
-    await self.message(chan, "[\x036admin\x0f] joining slowly as to not flood...")
+    await self.message(chan, "joining slowly as to not flood...")
     for i in self.chandb.all():
         await self.send(build("JOIN", [i["name"]]))
         await asyncio.sleep(1)
         print("joined {}".format(i["name"]))
     await self.message(
         chan,
-        "[\x036admin\x0f] Sucess! i may be laggy for a bit while i sort through all these channels...",
+        "Sucess! i may be laggy for a bit while i sort through all these channels...",
     )
 
 
@@ -70,74 +70,74 @@ async def ev(self, chan, source, msg):
     try:
         await self.message(
             chan,
-            "[\x036admin\x0f] ok, output: {}".format(
+            "ok, output: {}".format(
                 str(await aexec(self, " ".join(msg)))[:400]
             ),
         )
     except:
-        await self.message(chan, "[\x036admin\x0f] exception in eval!")
+        await self.message(chan, "exception in eval!")
 
 
 async def send(self, c, n, m):
     msg = m.split(" ")
     await self.message(msg.pop(0), " ".join(msg))
-    await self.message(c, "[\x036admin\x0f] sent")
+    await self.message(c, "sent")
 
 
 async def shut(self, c, n, m):
     shared.qtime[c] = time.time() + (60 * 10)
-    await self.message(c, "[\x036admin\x0f] Ok, il be back in 10 minutes")
+    await self.message(c, "Ok, il be back in 10 minutes")
 
 
 async def schans(self, c, n, m):
     self.chandb.delete()
     for i in self.channels:
         self.chandb.insert(dict(name=i))
-    await self.message(c, "[\x036admin\x0f] Ok")
+    await self.message(c, "Ok")
 
 
 async def addalias(self, c, n, m):
     al = m.split(" ")[0]
     m = m[len(al) + 1 :]  # dont use the list since i want trailing spaces
     if al in self.cmd:
-        await self.message(c, "[\x036admin\x0f] no dont overwrite a command dummy")
+        await self.message(c, "no dont overwrite a command dummy")
         return
     self.cmd[al] = Alias(m).alias
 
-    await self.message(c, '[\x036admin\x0f] added "{}" alias for "{}"'.format(al, m))
+    await self.message(c, 'added "{}" alias for "{}"'.format(al, m))
 
 
 async def addot(self, c, n, m):
     al = m.split(" ")[0]
     m = m[len(al) + 1 :]  # dont use the list since i want trailing spaces
     if al in shared.rawm:
-        await self.message(c, "[\x036admin\x0f] no dont overwrite a command dummy")
+        await self.message(c, "no dont overwrite a command dummy")
         return
     shared.rawm[al] = Ot(m, al).ot
 
-    await self.message(c, '[\x036admin\x0f] added "{}" trigger for "{}"'.format(al, m))
+    await self.message(c, 'added "{}" trigger for "{}"'.format(al, m))
 
 
 async def addspook(self, c, n, m):
     al = m.split(" ")[0]
     m = m[len(al) + 1 :]  # dont use the list since i want trailing spaces
     if al in shared.rawm:
-        await self.message(c, "[\x036admin\x0f] no dont overwrite a command dummy")
+        await self.message(c, "no dont overwrite a command dummy")
         return
     shared.rawm[al] = Spook(m, al).spook
 
-    await self.message(c, '[\x036admin\x0f] added "{}" trigger for "{}"'.format(al, m))
+    await self.message(c, 'added "{}" trigger for "{}"'.format(al, m))
 
 
 async def addtrigger(self, c, n, m):
     al = m.split(" ")[0]
     m = m[len(al) + 1 :]  # dont use the list since i want trailing spaces
     if al in shared.rawm:
-        await self.message(c, "[\x036admin\x0f] no dont overwrite a command dummy")
+        await self.message(c, "no dont overwrite a command dummy")
         return
     shared.rawm[al] = Trigger(m, al).trigger
 
-    await self.message(c, '[\x036admin\x0f] added "{}" trigger for "{}"'.format(al, m))
+    await self.message(c, 'added "{}" trigger for "{}"'.format(al, m))
 
 
 class Ot:
@@ -214,7 +214,7 @@ commands = {
 async def adminHandle(self, chan, source, msg):
     msg = msg.split(" ")
     if len(msg) < 1 or not msg[0] in commands:
-        await self.message(chan, "[\x036admin\x0f] Invalid command")
+        await self.message(chan, "Invalid command")
         return
     print("[ADMIN MODULE] {} told me to {}!!!".format(source, msg[0]))
     asyncio.create_task(commands[msg.pop(0)](self, chan, source, " ".join(msg)))
