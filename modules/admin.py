@@ -38,7 +38,7 @@ async def reloadmods(self, chan, source, msg):
         )
     except:
         await self.message(
-            chan, "reload failed... attempting to recover..."
+            chan, "reload failed... {}...".format(repr(sys.exc_info()[1]))
         )
         shared.commands = shared.oldcmd
 
@@ -77,7 +77,7 @@ async def ev(self, chan, source, msg):
             ),
         )
     except:
-        await self.message(chan, "exception in eval!")
+        await self.message(chan, "ut oh! {}".format(repr(sys.exc_info()[1])))
 
 
 async def send(self, c, n, m):
