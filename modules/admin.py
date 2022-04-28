@@ -154,7 +154,7 @@ class Ot:
         self.ms = str(ms)
         self.al = str(al)
         self.__class__.ots[al] = ms
-        shared.rawm[al] = self.command
+        shared.rawm[al] = self.ot
 
     async def ot(alself, self, c, n, m):
         if alself.al in m and n != self.nickname:
@@ -174,7 +174,7 @@ class Spook:
         self.ms = str(ms)
         self.al = str(al)
         self.__class__.spooks[al] = ms
-        shared.rawm[al] = self.command
+        shared.rawm[al] = self.spook
 
     async def spook(alself, self, c, n, m):
         if alself.al in m and n != self.nickname:
@@ -190,7 +190,7 @@ class Trigger:
         self.ms = str(ms)
         self.al = str(al)
         self.__class__.triggers[al] = ms
-        shared.rawm[al] = self.command
+        shared.rawm[al] = self.trigger
 
     async def trigger(alself, self, c, n, m):
         if alself.al in m:
