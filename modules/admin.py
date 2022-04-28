@@ -33,8 +33,7 @@ async def reloadmods(self, chan, source, msg):
             await shared.modules[i].init(self)
             # await self.message(chan, 'load {} sucess!'.format(i))
         await self.message(
-            chan,
-            "done! {} modules reloaded!".format(len(shared.modules)),
+            chan, "done! {} modules reloaded!".format(len(shared.modules))
         )
     except:
         await self.message(
@@ -59,22 +58,22 @@ async def joins(self, chan, source, msg):
     )
 
 
-async def aexec(self, code):
+async def aexec(self, code, chan=None, source=None, msg=None):
     # Make an async function with the code and `exec` it
-    exec(f"async def __ex(self): " + "".join(f"\n {l}" for l in code.split("\\n")))
+    exec(
+        f"async def __ex(self, chan, source, msg): "
+        + "".join(f"\n {l}" for l in code.split("\\n"))
+    )
 
     # Get `__ex` from local variables, call it and return the result
-    return await locals()["__ex"](self)
+    return await locals()["__ex"](self, chan, source, msg)
 
 
 async def ev(self, chan, source, msg):
     msg = msg.split(" ")
     try:
         await self.message(
-            chan,
-            "ok, output: {}".format(
-                str(await aexec(self, " ".join(msg)))[:400]
-            ),
+            chan, "ok, output: {}".format(str(await aexec(self, " ".join(msg)))[:400])
         )
     except:
         await self.message(chan, "ut oh! {}".format(repr(sys.exc_info()[1])))
@@ -101,10 +100,15 @@ async def schans(self, c, n, m):
 async def addalias(self, c, n, m):
     al = m.split(" ")[0]
     m = m[len(al) + 1 :]  # dont use the list since i want trailing spaces
-    if al in self.cmd:
-        await self.message(c, "no dont overwrite a command dummy")
-        return
-    self.cmd[al] = Alias(m).alias
+    Alias(al, m)
+
+    await self.message(c, 'added "{}" alias for "{}"'.format(al, m))
+
+
+async def addcommand(self, c, n, m):
+    al = m.split(" ")[0]
+    m = m[len(al) + 1 :]  # dont use the list since i want trailing spaces
+    Command(al, m)
 
     await self.message(c, 'added "{}" alias for "{}"'.format(al, m))
 
@@ -115,7 +119,7 @@ async def addot(self, c, n, m):
     if al in shared.rawm:
         await self.message(c, "no dont overwrite a command dummy")
         return
-    shared.rawm[al] = Ot(m, al).ot
+    Ot(al, m)
 
     await self.message(c, 'added "{}" trigger for "{}"'.format(al, m))
 
@@ -126,7 +130,7 @@ async def addspook(self, c, n, m):
     if al in shared.rawm:
         await self.message(c, "no dont overwrite a command dummy")
         return
-    shared.rawm[al] = Spook(m, al).spook
+    Spook(al, m)
 
     await self.message(c, 'added "{}" trigger for "{}"'.format(al, m))
 
@@ -137,15 +141,20 @@ async def addtrigger(self, c, n, m):
     if al in shared.rawm:
         await self.message(c, "no dont overwrite a command dummy")
         return
-    shared.rawm[al] = Trigger(m, al).trigger
+    Trigger(al, m)
 
     await self.message(c, 'added "{}" trigger for "{}"'.format(al, m))
 
 
 class Ot:
-    def __init__(self, ms, al):
+
+    ots = {}
+
+    def __init__(self, al, ms):
         self.ms = str(ms)
         self.al = str(al)
+        self.__class__.ots[al] = ms
+        shared.rawm[al] = self.command
 
     async def ot(alself, self, c, n, m):
         if alself.al in m and n != self.nickname:
@@ -158,20 +167,30 @@ class Ot:
 
 
 class Spook:
-    def __init__(self, ms, al):
+
+    spooks = {}
+
+    def __init__(self, al, ms):
         self.ms = str(ms)
         self.al = str(al)
+        self.__class__.spooks[al] = ms
+        shared.rawm[al] = self.command
 
     async def spook(alself, self, c, n, m):
         if alself.al in m and n != self.nickname:
-            asyncio.create_task(self.message(c, alself.ms.format(m)))
+            asyncio.create_task(self.send(build("PRIVMSG", [c, alself.ms.format(m)])))
             shared.rawm.pop(alself.al)
 
 
 class Trigger:
-    def __init__(self, ms, al):
+
+    triggers = {}
+
+    def __init__(self, al, ms):
         self.ms = str(ms)
         self.al = str(al)
+        self.__class__.triggers[al] = ms
+        shared.rawm[al] = self.command
 
     async def trigger(alself, self, c, n, m):
         if alself.al in m:
@@ -182,9 +201,33 @@ class Trigger:
             )
 
 
-class Alias:
-    def __init__(self, ms):
+class Command:
+
+    commands = {}
+
+    def __init__(self, cmd, ms):
         self.ms = str(ms)
+        self.__class__.commands[cmd] = ms
+        shared.commands[cmd] = self.command
+
+    async def command(alself, self, chan, source, msg):
+        try:
+            out = await aexec(self, alself.ms, chan, source, msg)
+        except:
+            await self.message(chan, "ut oh! {}".format(repr(sys.exc_info()[1])))
+        else:
+            if out is not None and len(out) > 0:
+                await self.message(chan, str(out))
+
+
+class Alias:
+
+    aliases = {}
+
+    def __init__(self, cmd, ms):
+        self.ms = str(ms)
+        self.__class__.aliases[cmd] = ms
+        shared.commands[cmd] = self.alias
 
     async def alias(alself, self, c, n, m):
         asyncio.create_task(
@@ -205,6 +248,7 @@ commands = {
     "shut": shut,
     "schans": schans,
     "addalias": addalias,
+    "addcommand": addcommand,
     "addtrigger": addtrigger,
     "addot": addot,
     "addspook": addspook,
@@ -227,7 +271,6 @@ async def init(self):
 
     self.admins = ["xfnw"]
     return
-    self.cmd["admin"] = adminHandle
 
     self.help["admin"] = [
         "admin - various bot owner commands (more for subcommands)",
