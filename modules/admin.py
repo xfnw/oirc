@@ -1,4 +1,4 @@
-import importlib, time, asyncio, random
+import importlib, time, asyncio, random, sys
 from bot import *
 
 quitmessages = [
@@ -11,11 +11,13 @@ quitmessages = [
 
 
 async def commit(self, chan, source, msg):
-    await self.quit("{} told me to commit {}".format(source, msg))
+    await self.send(build("QUIT", [f"{source} told me to commit {msg}!"]))
+    sys.exit()
 
 
 async def quit(self, chan, source, msg):
     await self.send(build("QUIT", [random.choice(quitmessages)]))
+    sys.exit()
 
 
 async def reloadmods(self, chan, source, msg):
@@ -59,7 +61,7 @@ async def joins(self, chan, source, msg):
 
 async def aexec(self, code):
     # Make an async function with the code and `exec` it
-    exec(f"async def __ex(self): " + "".join(f"\n {l}" for l in code.split("\n")))
+    exec(f"async def __ex(self): " + "".join(f"\n {l}" for l in code.split("\\n")))
 
     # Get `__ex` from local variables, call it and return the result
     return await locals()["__ex"](self)
